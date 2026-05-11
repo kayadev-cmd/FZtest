@@ -1,0 +1,945 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FARMZER0 — Zero miles. Maximum fresh.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css?v=3" />
+<script src="img-fallback.js"></script>
+<style>
+  /* ——— Hero ——— */
+  .hero { padding: 56px 0 48px; position: relative; }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+  .hero h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(64px, 9.5vw, 168px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    color: var(--forest);
+    margin: 24px 0 0;
+  }
+  .hero h1 em { font-style: italic; color: var(--forest); }
+  .hero h1 .zero { display: inline-block; font-style: italic; color: var(--accent); }
+  .hero-sub { margin-top: 32px; font-size: 18px; line-height: 1.45; color: var(--forest); max-width: 38ch; }
+  .hero-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 32px; }
+  .hero-image { position: relative; width: 100%; max-width: 600px; aspect-ratio: 1/1; max-height: 600px; justify-self: end; }
+  .hero-image .farm-card {
+    position: absolute; bottom: 24px; right: 24px;
+    background: var(--paper); padding: 18px 20px; min-width: 240px; z-index: 2;
+    box-shadow: 0 24px 48px rgba(13,12,10,0.16);
+  }
+  .farm-card-row { display: flex; justify-content: space-between; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.06em; padding: 4px 0; color: var(--forest); }
+  .farm-card-row b { color: var(--ink); font-weight: 500; }
+  .farm-card-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px; display: flex; gap: 8px; align-items: center;
+  }
+  .farm-card-title .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 1.6s infinite; }
+  @media (max-width: 980px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-image { min-height: 360px; }
+  }
+
+  /* ——— Crop cycle ——— */
+  .cycle { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 64px 0; }
+  .cycle-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 40px; flex-wrap: wrap; gap: 16px; }
+  .cycle-head h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(36px, 4.4vw, 56px); line-height: 1.02; letter-spacing: -0.01em;
+    margin: 8px 0 0; max-width: 18ch;
+  }
+  .cycle-head h2 em { font-style: italic; color: var(--accent); }
+  .cycle-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border-top: 1px solid var(--line); }
+  .c-step { padding: 28px 24px 28px 0; border-right: 1px solid var(--line); position: relative; }
+  .c-step:last-child { border-right: none; }
+  .c-step .day { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  .c-step .num { font-family: "Instrument Serif", serif; font-size: 64px; line-height: 1; color: var(--forest); letter-spacing: -0.02em; margin: 10px 0 14px; }
+  .c-step h3 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 22px; line-height: 1.05; margin: 0 0 6px; }
+  .c-step p { font-size: 13px; line-height: 1.5; color: var(--forest); margin: 0; }
+  @media (max-width: 980px) {
+    .cycle-steps { grid-template-columns: 1fr 1fr; }
+    .c-step { border-bottom: 1px solid var(--line); }
+    .c-step:nth-child(2n) { border-right: none; }
+  }
+
+  /* ——— Manifesto ——— */
+  .manifesto { padding: 120px 0; }
+  .manifesto p {
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(32px, 4.4vw, 64px);
+    line-height: 1.08; letter-spacing: -0.015em; color: var(--forest); max-width: 22ch; margin: 0;
+  }
+  .manifesto p em { font-style: italic; color: var(--accent); }
+  .manifesto-foot { display: flex; justify-content: space-between; align-items: end; margin-top: 64px; border-top: 1px solid var(--line); padding-top: 24px; }
+
+  /* ——— Shop / live feed with inventory ——— */
+  .shop {
+    background: var(--cream);
+  }
+  .shop-head {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end;
+    margin-bottom: 32px;
+  }
+  .shop-head h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.01em;
+    margin: 8px 0 0;
+  }
+  .shop-head h2 em { font-style: italic; color: var(--accent); }
+  .shop-head .desc { font-size: 16px; color: var(--forest); max-width: 44ch; }
+  @media (max-width: 880px) { .shop-head { grid-template-columns: 1fr; gap: 16px; } }
+
+  /* horizontal scrollable banner */
+  .banner-wrap {
+    position: relative;
+    margin: 0 -32px 32px;
+    padding: 0 32px;
+  }
+  .banner {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--forest) transparent;
+    padding-bottom: 12px;
+  }
+  .banner::-webkit-scrollbar { height: 6px; }
+  .banner::-webkit-scrollbar-track { background: var(--cream-deep); }
+  .banner::-webkit-scrollbar-thumb { background: var(--forest); border-radius: 999px; }
+  .banner-tile {
+    flex: 0 0 168px;
+    aspect-ratio: 1/1;
+    position: relative;
+    cursor: pointer;
+    background: var(--cream-deep);
+    overflow: hidden;
+    transition: transform 200ms ease;
+  }
+  .banner-tile:hover { transform: translateY(-3px); }
+  .banner-tile img { width: 100%; height: 100%; object-fit: cover; }
+  .banner-tile .lab {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 8px 10px;
+    background: linear-gradient(180deg, rgba(13,12,10,0) 0%, rgba(13,12,10,0.78) 100%);
+    color: var(--cream);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .banner-tile .lab b {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400; font-size: 16px; letter-spacing: 0;
+    text-transform: none;
+  }
+  .banner-tile .lab .bar {
+    display: block; height: 3px; width: 100%; margin-top: 4px;
+    background: rgba(255,255,255,0.18); border-radius: 2px; overflow: hidden;
+  }
+  .banner-tile .lab .bar i {
+    display: block; height: 100%; background: #74D49E; border-radius: 2px;
+    transition: width 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .banner-tile .lab .bar.low i { background: var(--gold); }
+  .banner-tile .lab .bar.out i { background: #C57B57; width: 0 !important; }
+  .banner-tile .stock-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #74D49E;
+    display: inline-block; margin-right: 4px;
+  }
+  .banner-tile .stock-dot.low { background: var(--gold); }
+  .banner-tile .stock-dot.out { background: #C57B57; }
+  .banner-edge {
+    position: absolute; top: 0; bottom: 12px; width: 64px; pointer-events: none; z-index: 2;
+  }
+  .banner-edge.left { left: 0; background: linear-gradient(90deg, var(--cream) 0%, rgba(242,237,227,0) 100%); }
+  .banner-edge.right { right: 0; background: linear-gradient(270deg, var(--cream) 0%, rgba(242,237,227,0) 100%); }
+
+  /* product grid w/ inventory gauges */
+  .products {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  }
+  .product { cursor: pointer; transition: transform 220ms ease; display: flex; flex-direction: column; }
+  .product:hover { transform: translateY(-4px); }
+  .product .img-frame { aspect-ratio: 4/5; }
+  .product-head { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; }
+  .product-head h3 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: 24px; line-height: 1; margin: 0; letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .product-head .price { font-family: "JetBrains Mono", monospace; font-size: 14px; }
+  .product-meta {
+    display: flex; justify-content: space-between;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em;
+    color: var(--forest); opacity: 0.7;
+    margin-top: 8px; text-transform: uppercase;
+  }
+
+  /* inventory gauge */
+  .gauge { margin-top: 14px; }
+  .gauge-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--forest); margin-bottom: 6px;
+  }
+  .gauge-row b { color: var(--ink); font-weight: 500; }
+  .gauge-row .status { display: inline-flex; align-items: center; gap: 6px; }
+  .gauge-row .status .stock-dot { width: 6px; height: 6px; border-radius: 50%; background: #2E8B57; }
+  .gauge-row .status.low .stock-dot { background: var(--gold); }
+  .gauge-row .status.out .stock-dot { background: #C57B57; }
+  .gauge-track {
+    height: 4px;
+    background: var(--cream-deep);
+    position: relative;
+    overflow: hidden;
+  }
+  .gauge-track i {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: var(--forest);
+    width: 0%;
+    transition: width 1.2s ease;
+  }
+  .gauge-track i.low { background: var(--gold); }
+  .gauge-track i.out { background: #C57B57; }
+  .product-tags { margin-top: 12px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 4px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--forest);
+  }
+  .tag.solid { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+  @media (max-width: 880px) { .products { grid-template-columns: 1fr; } }
+
+  /* ——— Personas ——— */
+  .personas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .persona {
+    background: var(--paper); border: 1px solid var(--line); padding: 32px;
+    display: flex; flex-direction: column; min-height: 340px;
+  }
+  .persona .img-frame { display: none; }
+  .persona .num { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
+  .persona h3 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: 36px; line-height: 1; margin: 4px 0 6px; letter-spacing: -0.01em; }
+  .persona .who { font-size: 14px; color: var(--forest); opacity: 0.75; margin-bottom: 16px; }
+  .persona p { font-size: 14px; line-height: 1.55; color: var(--charcoal); margin: 0 0 16px; }
+  .persona .pick {
+    margin-top: auto; padding-top: 18px;
+    border-top: 1px dashed var(--line);
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .persona .pick b { font-family: "Instrument Serif", serif; font-style: italic; font-size: 18px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--forest); }
+  @media (max-width: 980px) { .personas { grid-template-columns: 1fr; } }
+
+  /* ——— Partners ——— */
+  .partners { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--cream); padding: 28px 0; }
+  .partners-label {
+    font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--forest);
+    padding: 0 32px 14px; opacity: 0.75;
+  }
+  .partner-item {
+    font-family: "Instrument Serif", serif; font-size: 44px; line-height: 1; color: var(--forest);
+    display: inline-flex; align-items: center; gap: 64px;
+  }
+  .partner-item::after { content: "✻"; color: var(--accent); font-size: 18px; }
+
+  /* ——— Map ——— */
+  .map-section { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: stretch; }
+  .map-copy h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(40px, 5vw, 72px); line-height: 1.02; margin: 12px 0 24px; letter-spacing: -0.01em; }
+  .map-copy p { font-size: 16px; color: var(--forest); margin: 0 0 24px; max-width: 38ch; }
+  .map-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .map-stat .num { font-family: "Instrument Serif", serif; font-size: 64px; line-height: 1; letter-spacing: -0.02em; color: var(--forest); }
+  .map-stat .num em { font-style: italic; color: var(--accent); }
+  .map-stat .label { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.7; margin-top: 8px; }
+  .map-canvas { background: var(--cream); border: 1px solid var(--line); aspect-ratio: 4/4.2; position: relative; overflow: hidden; }
+  .map-canvas svg { width: 100%; height: 100%; display: block; }
+  .map-pin-label {
+    position: absolute; font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    background: var(--paper); border: 1px solid var(--line); padding: 4px 8px; transform: translate(-50%, -120%); pointer-events: none;
+  }
+  .map-pin-label.farm { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+  @media (max-width: 980px) { .map-section { grid-template-columns: 1fr; } }
+
+  /* ——— Newsletter ——— */
+  .newsletter { text-align: center; padding: 120px 0; border-top: 1px solid var(--line); }
+  .newsletter h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(48px, 6vw, 96px); line-height: 1; letter-spacing: -0.015em; margin: 0 0 16px; color: var(--forest); }
+  .newsletter h2 em { font-style: italic; color: var(--accent); }
+  .newsletter p { color: var(--forest); margin: 0 auto 32px; max-width: 44ch; }
+  .form { display: inline-flex; border: 1px solid var(--forest); border-radius: 999px; overflow: hidden; max-width: 100%; }
+  .form input { border: none; padding: 14px 22px; font: inherit; background: transparent; min-width: 280px; color: var(--forest); }
+  .form input:focus { outline: none; }
+  .form button { background: var(--forest); color: var(--cream); padding: 0 22px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- Live status strip -->
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+    <nav class="nav">
+      <a href="index.html" class="active">Shop</a>
+      <a href="the-farm.html">The Farm</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · <span id="bag-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero" data-screen-label="01 Hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">FARMZER0 · CHICAGO LOOP · EST. 2024</div>
+      <h1>
+        Zero <span class="zero">miles.</span><br/>
+        Maximum <em>fresh.</em>
+      </h1>
+      <p class="hero-sub">
+        We grow microgreens, herbs, and leafy greens inside a downtown
+        Chicago office tower — then walk them to your kitchen, hospital, or
+        restaurant the same day. <span class="serif italic">No trucks. No middlemen. No days lost in transit.</span>
+      </p>
+      <div class="hero-meta">
+        <a class="btn btn-dark" href="#shop">Order now <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="the-farm.html">Tour the farm <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+    <div class="hero-image img-frame hyperlapse">
+      <div class="hl-frame hl-stage hl-stage-1" aria-label="Day 1 — seeded soil">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" fill="#3a2a1c"/>
+          <rect width="600" height="600" fill="url(#soil-tex)" opacity="0.55"/>
+          <defs>
+            <radialGradient id="soil-tex" cx="50%" cy="40%" r="70%">
+              <stop offset="0%" stop-color="#5a4128"/>
+              <stop offset="100%" stop-color="#1d130a"/>
+            </radialGradient>
+          </defs>
+          <g fill="#8a6a3e" opacity="0.85">
+            <circle cx="120" cy="180" r="4"/><circle cx="200" cy="240" r="3"/><circle cx="280" cy="200" r="4"/>
+            <circle cx="360" cy="260" r="3"/><circle cx="440" cy="220" r="4"/><circle cx="160" cy="320" r="3"/>
+            <circle cx="240" cy="360" r="4"/><circle cx="320" cy="320" r="3"/><circle cx="400" cy="380" r="4"/>
+            <circle cx="480" cy="340" r="3"/><circle cx="100" cy="420" r="4"/><circle cx="180" cy="460" r="3"/>
+            <circle cx="260" cy="440" r="4"/><circle cx="340" cy="480" r="3"/><circle cx="420" cy="450" r="4"/>
+            <circle cx="500" cy="430" r="3"/><circle cx="140" cy="250" r="2.5"/><circle cx="380" cy="160" r="3"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hl-frame hl-stage hl-stage-2" aria-label="Day 3 — sprouting">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" fill="#2c2014"/>
+          <g stroke="#7da764" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.9">
+            <path d="M 60 540 Q 60 510 62 470"/>
+            <path d="M 110 545 Q 110 505 113 460"/>
+            <path d="M 160 540 Q 160 500 158 455"/>
+            <path d="M 210 545 Q 210 510 213 465"/>
+            <path d="M 260 540 Q 260 505 258 460"/>
+            <path d="M 310 545 Q 310 500 312 450"/>
+            <path d="M 360 540 Q 360 510 358 465"/>
+            <path d="M 410 545 Q 410 505 412 460"/>
+            <path d="M 460 540 Q 460 500 458 455"/>
+            <path d="M 510 545 Q 510 505 513 460"/>
+            <path d="M 560 540 Q 560 510 558 470"/>
+            <path d="M 85 545 Q 85 515 87 480"/>
+            <path d="M 135 545 Q 135 510 137 470"/>
+            <path d="M 185 545 Q 185 515 187 475"/>
+            <path d="M 235 545 Q 235 510 237 470"/>
+            <path d="M 285 545 Q 285 515 287 475"/>
+            <path d="M 335 545 Q 335 510 337 470"/>
+            <path d="M 385 545 Q 385 515 387 475"/>
+            <path d="M 435 545 Q 435 510 437 470"/>
+            <path d="M 485 545 Q 485 515 487 475"/>
+            <path d="M 535 545 Q 535 510 537 470"/>
+          </g>
+          <rect y="540" width="600" height="60" fill="#1c1108"/>
+        </svg>
+      </div>
+      <div class="hl-frame hl-stage hl-stage-3" aria-label="Day 5 — first leaves">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" fill="#1f1810"/>
+          <g fill="#9bc77a" opacity="0.95">
+            <ellipse cx="60" cy="370" rx="14" ry="6" transform="rotate(-20 60 370)"/>
+            <ellipse cx="110" cy="360" rx="14" ry="6" transform="rotate(15 110 360)"/>
+            <ellipse cx="160" cy="370" rx="14" ry="6" transform="rotate(-10 160 370)"/>
+            <ellipse cx="210" cy="355" rx="14" ry="6" transform="rotate(20 210 355)"/>
+            <ellipse cx="260" cy="365" rx="14" ry="6" transform="rotate(-15 260 365)"/>
+            <ellipse cx="310" cy="370" rx="14" ry="6" transform="rotate(10 310 370)"/>
+            <ellipse cx="360" cy="355" rx="14" ry="6" transform="rotate(-20 360 355)"/>
+            <ellipse cx="410" cy="365" rx="14" ry="6" transform="rotate(15 410 365)"/>
+            <ellipse cx="460" cy="370" rx="14" ry="6" transform="rotate(-10 460 370)"/>
+            <ellipse cx="510" cy="360" rx="14" ry="6" transform="rotate(20 510 360)"/>
+            <ellipse cx="560" cy="370" rx="14" ry="6" transform="rotate(-15 560 370)"/>
+          </g>
+          <g stroke="#7da764" stroke-width="3" stroke-linecap="round" fill="none">
+            <path d="M 60 540 L 60 375"/><path d="M 110 545 L 110 360"/><path d="M 160 540 L 160 370"/>
+            <path d="M 210 545 L 210 355"/><path d="M 260 540 L 260 365"/><path d="M 310 545 L 310 370"/>
+            <path d="M 360 545 L 360 355"/><path d="M 410 540 L 410 365"/><path d="M 460 545 L 460 370"/>
+            <path d="M 510 540 L 510 360"/><path d="M 560 545 L 560 370"/>
+          </g>
+          <rect y="540" width="600" height="60" fill="#15100a"/>
+        </svg>
+      </div>
+      <div class="hl-frame hl-stage hl-stage-4" aria-label="Day 7 — full canopy">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" fill="#0c1208"/>
+          <g fill="#5d9a52">
+            <ellipse cx="40" cy="220" rx="28" ry="14" transform="rotate(-25 40 220)"/>
+            <ellipse cx="100" cy="200" rx="32" ry="15" transform="rotate(15 100 200)"/>
+            <ellipse cx="170" cy="210" rx="30" ry="14" transform="rotate(-10 170 210)"/>
+            <ellipse cx="240" cy="195" rx="34" ry="16" transform="rotate(25 240 195)"/>
+            <ellipse cx="310" cy="205" rx="30" ry="14" transform="rotate(-20 310 205)"/>
+            <ellipse cx="380" cy="200" rx="32" ry="15" transform="rotate(10 380 200)"/>
+            <ellipse cx="450" cy="210" rx="30" ry="14" transform="rotate(-15 450 210)"/>
+            <ellipse cx="520" cy="195" rx="34" ry="16" transform="rotate(20 520 195)"/>
+            <ellipse cx="580" cy="220" rx="28" ry="14" transform="rotate(-25 580 220)"/>
+          </g>
+          <g fill="#7eb86d">
+            <ellipse cx="60" cy="270" rx="30" ry="14" transform="rotate(15 60 270)"/>
+            <ellipse cx="135" cy="260" rx="32" ry="15" transform="rotate(-20 135 260)"/>
+            <ellipse cx="210" cy="270" rx="30" ry="14" transform="rotate(10 210 270)"/>
+            <ellipse cx="285" cy="255" rx="34" ry="16" transform="rotate(-25 285 255)"/>
+            <ellipse cx="360" cy="265" rx="30" ry="14" transform="rotate(20 360 265)"/>
+            <ellipse cx="430" cy="260" rx="32" ry="15" transform="rotate(-15 430 260)"/>
+            <ellipse cx="500" cy="270" rx="30" ry="14" transform="rotate(25 500 270)"/>
+            <ellipse cx="560" cy="265" rx="28" ry="13" transform="rotate(-10 560 265)"/>
+          </g>
+          <g fill="#9bc77a">
+            <ellipse cx="80" cy="340" rx="32" ry="15" transform="rotate(-20 80 340)"/>
+            <ellipse cx="170" cy="330" rx="36" ry="17" transform="rotate(15 170 330)"/>
+            <ellipse cx="260" cy="340" rx="32" ry="15" transform="rotate(-10 260 340)"/>
+            <ellipse cx="350" cy="325" rx="36" ry="17" transform="rotate(25 350 325)"/>
+            <ellipse cx="440" cy="335" rx="32" ry="15" transform="rotate(-20 440 335)"/>
+            <ellipse cx="520" cy="345" rx="30" ry="14" transform="rotate(10 520 345)"/>
+          </g>
+          <g stroke="#3d6b34" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.7">
+            <path d="M 60 540 L 60 280"/><path d="M 120 545 L 120 265"/><path d="M 180 540 L 180 275"/>
+            <path d="M 240 545 L 240 260"/><path d="M 300 540 L 300 270"/><path d="M 360 545 L 360 265"/>
+            <path d="M 420 540 L 420 275"/><path d="M 480 545 L 480 260"/><path d="M 540 540 L 540 270"/>
+          </g>
+        </svg>
+      </div>
+      <div class="hl-frame hl-stage hl-stage-5" aria-label="Day 9 — harvest">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="600" height="600" fill="#0a1006"/>
+          <g fill="#4d8543">
+            <ellipse cx="50" cy="150" rx="38" ry="18" transform="rotate(-25 50 150)"/>
+            <ellipse cx="130" cy="135" rx="40" ry="19" transform="rotate(15 130 135)"/>
+            <ellipse cx="215" cy="145" rx="38" ry="18" transform="rotate(-10 215 145)"/>
+            <ellipse cx="300" cy="130" rx="42" ry="20" transform="rotate(25 300 130)"/>
+            <ellipse cx="385" cy="145" rx="38" ry="18" transform="rotate(-20 385 145)"/>
+            <ellipse cx="470" cy="135" rx="40" ry="19" transform="rotate(10 470 135)"/>
+            <ellipse cx="555" cy="150" rx="38" ry="18" transform="rotate(-15 555 150)"/>
+          </g>
+          <g fill="#6ea65a">
+            <ellipse cx="80" cy="210" rx="40" ry="19" transform="rotate(15 80 210)"/>
+            <ellipse cx="175" cy="200" rx="42" ry="20" transform="rotate(-20 175 200)"/>
+            <ellipse cx="270" cy="210" rx="40" ry="19" transform="rotate(10 270 210)"/>
+            <ellipse cx="365" cy="195" rx="44" ry="21" transform="rotate(-25 365 195)"/>
+            <ellipse cx="460" cy="205" rx="40" ry="19" transform="rotate(20 460 205)"/>
+            <ellipse cx="540" cy="210" rx="38" ry="18" transform="rotate(-15 540 210)"/>
+          </g>
+          <g fill="#8ec774">
+            <ellipse cx="60" cy="280" rx="42" ry="20" transform="rotate(-20 60 280)"/>
+            <ellipse cx="160" cy="270" rx="46" ry="22" transform="rotate(15 160 270)"/>
+            <ellipse cx="260" cy="280" rx="42" ry="20" transform="rotate(-10 260 280)"/>
+            <ellipse cx="360" cy="265" rx="46" ry="22" transform="rotate(25 360 265)"/>
+            <ellipse cx="460" cy="275" rx="42" ry="20" transform="rotate(-20 460 275)"/>
+            <ellipse cx="550" cy="285" rx="40" ry="19" transform="rotate(10 550 285)"/>
+          </g>
+          <g fill="#a8d488">
+            <ellipse cx="90" cy="350" rx="44" ry="21" transform="rotate(10 90 350)"/>
+            <ellipse cx="200" cy="340" rx="48" ry="23" transform="rotate(-20 200 340)"/>
+            <ellipse cx="310" cy="350" rx="44" ry="21" transform="rotate(15 310 350)"/>
+            <ellipse cx="420" cy="335" rx="48" ry="23" transform="rotate(-25 420 335)"/>
+            <ellipse cx="520" cy="345" rx="44" ry="21" transform="rotate(20 520 345)"/>
+          </g>
+          <line x1="0" y1="430" x2="600" y2="430" stroke="#c9a85b" stroke-width="1.5" stroke-dasharray="6 6" opacity="0.55"/>
+        </svg>
+      </div>
+      <div class="hl-overlay">
+        <span class="hl-rec"><i></i> REC</span>
+        <span class="hl-day">DAY <b>1</b> / 9 · HYPERLAPSE</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Partners marquee — moved up -->
+<section class="partners" data-screen-label="02 Partners">
+  <div class="partners-label">Currently building the Next Food Ecosystem With:</div>
+  <div class="marquee">
+    <div class="marquee-track">
+      <span class="partner-item">Blue Plate Catering</span>
+      <span class="partner-item">Jump Trading</span>
+      <span class="partner-item">Deloitte</span>
+      <span class="partner-item">Tempus AI</span>
+      <span class="partner-item">Bon Appétit</span>
+      <span class="partner-item">UBER</span>
+      <span class="partner-item">Bazaar Meats by José Andrés</span>
+      <span class="partner-item">Nomi</span>
+      <span class="partner-item">UIC Medicine</span>
+      <span class="partner-item">Pinterest</span>
+      <span class="partner-item">Blue Plate Catering</span>
+      <span class="partner-item">Jump Trading</span>
+      <span class="partner-item">Deloitte</span>
+      <span class="partner-item">Tempus AI</span>
+      <span class="partner-item">Bon Appétit</span>
+      <span class="partner-item">UBER</span>
+      <span class="partner-item">Bazaar Meats by José Andrés</span>
+      <span class="partner-item">Nomi</span>
+      <span class="partner-item">UIC Medicine</span>
+      <span class="partner-item">Pinterest</span>
+    </div>
+  </div>
+</section>
+
+<!-- Shop / live feed with inventory gauges -->
+<section class="section section-tight shop" id="shop" data-screen-label="04 Shop">
+  <div class="wrap">
+    <div class="shop-head">
+      <div>
+        <div class="eyebrow"><span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#2E8B57; margin-right:6px; vertical-align: 1px;"></span>THE CROP REPORT</div>
+        <h2>Cut today.<br/>Walked across the <em>Loop.</em></h2>
+      </div>
+      <div class="desc">
+        Twelve single varieties and two specialty blends, harvested the morning
+        of pickup. Inventory is live — when it's gone for the week, it's gone.
+        Order by 8pm to pick up tomorrow at our Loop counter.
+      </div>
+    </div>
+
+    <!-- scrollable banner of all 14 -->
+    <div class="banner-wrap">
+      <div class="banner-edge left"></div>
+      <div class="banner-edge right"></div>
+      <div class="banner" id="banner"></div>
+    </div>
+
+    <!-- product grid w/ inventory -->
+    <div class="products" id="products"></div>
+
+    <div style="margin-top: 48px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--line); padding-top: 24px; flex-wrap: wrap; gap: 16px;">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.06em; color: var(--forest); opacity: 0.7;">SHOWING 6 OF 14 · ALL ORGANIC · 100% RECYCLABLE PACKAGING · INVENTORY UPDATED <b id="inv-updated">JUST NOW</b></span>
+      <a class="btn btn-light" href="#all">All products <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Personas -->
+<section class="section" data-screen-label="05 Personas">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">WHO IT'S FOR</div>
+        <h2>Three reasons<br/>people pick up.</h2>
+      </div>
+      <div class="desc">
+        FARMZER0 customers tell us they walk in for one of three things — health
+        for their family, ingredients chefs can't easily get, or a measurable edge.
+        Pick the door that's yours.
+      </div>
+    </div>
+
+    <div class="personas">
+      <article class="persona">
+        <span class="num">PERSONA 01</span>
+        <h3>The Nourisher</h3>
+        <div class="who">Conscious parent · 34–45 · Lincoln Park / River North</div>
+        <p>
+          Wants the cleanest possible produce for her family — and is tired of
+          grocery store greens being three days old before they hit the cart.
+          Picks up on the commute home.
+        </p>
+        <div class="pick"><span>Picks up</span><b>Baller Mix</b></div>
+      </article>
+
+      <article class="persona">
+        <span class="num">PERSONA 02</span>
+        <h3>The Craftsman</h3>
+        <div class="who">Urban home chef · 28–42 · West Loop / Fulton Market</div>
+        <p>
+          Plates like a chef at home. Restaurant-grade single varieties — Wasabi,
+          Pak Choi, Daikon Radish — that you can't get at Jewel or even Whole
+          Foods. Microgreens are a finishing move.
+        </p>
+        <div class="pick"><span>Picks up</span><b>Wasabi greens</b></div>
+      </article>
+
+      <article class="persona">
+        <span class="num">PERSONA 03</span>
+        <h3>The Optimizer</h3>
+        <div class="who">Performance &amp; wellness · 25–40 · Loop / River North</div>
+        <p>
+          Tracks macros, sleep and labs. Buys microgreens because they pack
+          4–40× the nutrient density of mature plants. Not a garnish — a
+          performance food.
+        </p>
+        <div class="pick"><span>Picks up</span><b>Broccoli + Sunflower</b></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Loop map -->
+<section class="section" data-screen-label="06 Loop map">
+  <div class="wrap map-section">
+    <div class="map-copy">
+      <div class="eyebrow">THE FARM &amp; THE LOOP</div>
+      <h2>One farm.<br/>A 12-block delivery radius.</h2>
+      <p>
+        Our flagship farm sits at <span class="mono">125 S. Wacker Drive</span>.
+        Most pickups walk out the front door. Wholesale partners get a same-morning
+        runner — under twenty minutes from grow-bed to back-of-house.
+      </p>
+      <a class="btn btn-dark" href="the-farm.html">Tour the farm <span class="arrow">→</span></a>
+
+      <div class="map-stats">
+        <div class="map-stat">
+          <div class="num"><em>0.4</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; vertical-align: super; opacity: 0.6; margin-left: 4px;">mi</span></div>
+          <div class="label">Avg distance to customer</div>
+        </div>
+        <div class="map-stat">
+          <div class="num"><em>18</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; vertical-align: super; opacity: 0.6; margin-left: 4px;">min</span></div>
+          <div class="label">Avg time, harvest → plate</div>
+        </div>
+        <div class="map-stat">
+          <div class="num"><em>9,023</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; vertical-align: super; opacity: 0.6; margin-left: 4px;">sqft</span></div>
+          <div class="label">Active grow space</div>
+        </div>
+        <div class="map-stat">
+          <div class="num"><em>97</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 16px; vertical-align: super; opacity: 0.6; margin-left: 4px;">%</span></div>
+          <div class="label">Less water vs. field-grown</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="map-canvas" id="map"></div>
+  </div>
+</section>
+
+<!-- Crop cycle (moved above newsletter) -->
+<section class="cycle" data-screen-label="07 Crop cycle">
+  <div class="wrap">
+    <div class="cycle-head">
+      <div>
+        <div class="eyebrow">CROP CYCLE · NINE DAYS, INDOORS</div>
+        <h2>Seed to <em>plate</em> in nine days.</h2>
+      </div>
+      <a class="btn-ghost" href="the-farm.html">Tour the farm →</a>
+    </div>
+    <div class="cycle-steps">
+      <div class="c-step">
+        <div class="day">DAY 1</div>
+        <div class="num">01</div>
+        <h3>Seed</h3>
+        <p>Organic seed soaked overnight in our seed lab, then spread by hand on hemp grow mats.</p>
+      </div>
+      <div class="c-step">
+        <div class="day">DAYS 2–3</div>
+        <div class="num">02</div>
+        <h3>Germinate</h3>
+        <p>Dark, humid, 70°F. The first roots reach down. No pesticides — never needed indoors.</p>
+      </div>
+      <div class="c-step">
+        <div class="day">DAYS 4–6</div>
+        <div class="num">03</div>
+        <h3>Grow</h3>
+        <p>Lights up. LED spectrum tuned per crop. The wall turns from soil-brown to vivid green in 48 hours.</p>
+      </div>
+      <div class="c-step">
+        <div class="day">DAYS 7–8</div>
+        <div class="num">04</div>
+        <h3>Mature</h3>
+        <p>Cotyledons fully open. Nutrient density peaks here — 4–40× the parent plant.</p>
+      </div>
+      <div class="c-step">
+        <div class="day">DAY 9</div>
+        <div class="num">05</div>
+        <h3>Harvest</h3>
+        <p>Cut to order, sealed in recyclable trays, and walked across the Loop before noon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter">
+  <div class="wrap-narrow">
+    <div class="eyebrow">JOIN THE FARM LIST</div>
+    <h2>What's <em>harvesting</em><br/>this week, in your inbox.</h2>
+    <p>Every Sunday — what's on the grow walls, what's coming off this week, and a recipe from a Loop chef that uses it.</p>
+    <form class="form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed';">
+      <input type="email" placeholder="you@yourbuilding.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+        <p style="font-size: 14px; opacity: 0.85; max-width: 36ch; margin-top: 16px;">
+          Indoor urban farms inside the buildings where food is actually eaten.
+          Built in Chicago. Designed to scale.
+        </p>
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 24px;">
+          125 S. WACKER DRIVE<br/>CHICAGO IL 60606
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#shop">Microgreens</a></li>
+          <li><a href="#shop">Specialty blends</a></li>
+          <li><a href="#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#">Workplace dining</a></li>
+          <li><a href="#">Hospitals &amp; Food Rx</a></li>
+          <li><a href="#">Restaurants</a></li>
+          <li><a href="#">Residential</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="the-farm.html">The farm</a></li>
+          <li><a href="about.html">Our story</a></li>
+          <li><a href="about.html#timeline">Milestones</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-mark">FARMZER<span style="color: var(--gold);">0</span></div>
+
+    <div class="footer-bottom">
+      <span>© 2026 FARMZER0 · CHICAGO</span>
+      <span>GROWN HERE · EATEN HERE</span>
+    </div>
+  </div>
+</footer>
+
+<!-- React (for tweaks panel only) -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks.jsx"></script>
+
+<div id="tweaks-mount"></div>
+
+<script>
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "accent": "#00F464",
+  "tagline": "Zero miles. Maximum fresh.",
+  "density": "regular",
+  "showLiveStrip": true
+}/*EDITMODE-END*/;
+window.__TWEAKS = TWEAKS;
+
+function applyTweaks(t) {
+  document.documentElement.style.setProperty("--accent", t.accent);
+  const strip = document.querySelector(".status-strip");
+  if (strip) strip.style.display = t.showLiveStrip ? "" : "none";
+  const h1 = document.querySelector(".hero h1");
+  if (h1 && t.tagline) {
+    const parts = t.tagline.split(".").map(s => s.trim()).filter(Boolean);
+    if (parts.length >= 2) {
+      h1.innerHTML =
+        `${parts[0].split(" ").slice(0, -1).join(" ")} <span class="zero">${parts[0].split(" ").slice(-1)[0]}.</span><br/>` +
+        `${parts[1].split(" ").slice(0, -1).join(" ")} <em>${parts[1].split(" ").slice(-1)[0]}.</em>`;
+    } else { h1.textContent = t.tagline; }
+  }
+}
+applyTweaks(TWEAKS);
+
+/* Live readouts (status strip is now a marquee) */
+function updateLiveTemp() {
+  const t = 67.4 + Math.random() * 1.6;
+  const hc = document.getElementById("hc-temp");
+  if (hc) hc.textContent = t.toFixed(1) + "°F";
+}
+updateLiveTemp();
+setInterval(updateLiveTemp, 4000);
+
+/* Hyperlapse day counter — synced with 7s CSS loop (5 frames × 1.4s) */
+(function() {
+  const dayEl = document.querySelector(".hl-day b");
+  if (!dayEl) return;
+  const days = [1, 3, 5, 7, 9];
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % days.length;
+    dayEl.textContent = days[i];
+  }, 1400);
+})();
+
+/* Banner — 14 thumbnails */
+const banner = [
+  { name: "Pea Shoots",     img: "placeholder://product", stock: 76 },
+  { name: "Sunflower",      img: "placeholder://product", stock: 54 },
+  { name: "Broccoli",       img: "placeholder://product", stock: 88 },
+  { name: "Baller Mix",     img: "placeholder://product", stock: 42 },
+  { name: "Wasabi",         img: "placeholder://product", stock: 18 },
+  { name: "Cilantro",       img: "placeholder://product", stock: 64 },
+  { name: "Basil",          img: "placeholder://product", stock: 70 },
+  { name: "Arugula",        img: "placeholder://product", stock: 32 },
+  { name: "Mustard",        img: "placeholder://product", stock: 50 },
+  { name: "Red Cabbage",    img: "placeholder://product", stock: 60 },
+  { name: "Pak Choi",       img: "placeholder://product", stock: 14 },
+  { name: "Daikon Radish",  img: "placeholder://product", stock: 0 },
+  { name: "Longevity Mix",  img: "placeholder://product", stock: 22 },
+  { name: "Nasturtium",     img: "placeholder://product", stock: 8 },
+];
+function stockClass(s) { return s === 0 ? "out" : (s < 25 ? "low" : ""); }
+function stockLabel(s) { return s === 0 ? "Sold out" : (s < 25 ? "Low · " + s + "%" : s + "% in stock"); }
+document.getElementById("banner").innerHTML = banner.map(b => `
+  <div class="banner-tile" title="${b.name}">
+    <img src="${b.img}" alt="${b.name}" />
+    <div class="lab">
+      <b>${b.name}</b>
+      <span class="bar ${stockClass(b.stock)}"><i style="width: ${b.stock}%"></i></span>
+    </div>
+  </div>
+`).join("");
+
+/* Featured products grid w/ gauges */
+const products = [
+  { name: "Baller Mix",       size: "2 oz", price: "$8",  img: "placeholder://product", tags: ["BESTSELLER","ANTIOX"], stock: 42, total: 60, link: "baller-mix.html" },
+  { name: "Pea Shoots",       size: "2 oz", price: "$7",  img: "placeholder://product", tags: ["FIBER","B-VITAMINS"],  stock: 76, total: 80, link: "#" },
+  { name: "Broccoli Greens", size: "2 oz", price: "$9",  img: "placeholder://product", tags: ["SULFORAPHANE"],         stock: 88, total: 100, link: "#" },
+  { name: "Wasabi greens",    size: "1 oz", price: "$11", img: "placeholder://product", tags: ["SPECIALTY","CHEF PICK"], stock: 18, total: 40, link: "#" },
+  { name: "Sunflower",        size: "2 oz", price: "$7",  img: "placeholder://product", tags: ["PROTEIN"],              stock: 54, total: 80, link: "#" },
+  { name: "Longevity Mix",    size: "2 oz", price: "$9",  img: "placeholder://product", tags: ["NEW","POLYPHENOLS"],   stock: 22, total: 50, link: "#" },
+];
+document.getElementById("products").innerHTML = products.map(p => {
+  const cls = stockClass(p.stock);
+  const label = p.stock === 0 ? "SOLD OUT" : (p.stock < 25 ? "LOW STOCK" : "IN STOCK");
+  return `
+  <a class="product" href="${p.link}">
+    <div class="img-frame" style="aspect-ratio: 4/5;">
+      <img src="${p.img}" alt="${p.name}" />
+    </div>
+    <div class="product-head">
+      <h3>${p.name}</h3>
+      <span class="price">${p.price}</span>
+    </div>
+    <div class="product-meta">
+      <span>${p.size}</span>
+      <span>+ Add</span>
+    </div>
+    <div class="gauge">
+      <div class="gauge-row">
+        <span class="status ${cls}"><span class="stock-dot"></span>${label}</span>
+        <span><b>${p.stock}</b>/${p.total} TRAYS</span>
+      </div>
+      <div class="gauge-track"><i class="${cls}" data-w="${Math.round(100*p.stock/p.total)}"></i></div>
+    </div>
+    <div class="product-tags">
+      ${p.tags.map((t,j) => `<span class="tag${j===0?' solid':''}">${t}</span>`).join("")}
+    </div>
+  </a>`;
+}).join("");
+setTimeout(() => {
+  document.querySelectorAll(".gauge-track i").forEach(i => { i.style.width = i.dataset.w + "%"; });
+}, 300);
+
+/* Loop map */
+document.getElementById("map").innerHTML = `
+  <svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid meet">
+    <rect x="320" y="0" width="80" height="420" fill="#D7DACB" opacity="0.45" />
+    <text x="328" y="28" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.2" fill="#0E2A20" opacity="0.6">LAKE MICHIGAN</text>
+    <path d="M0 130 L 200 130 L 230 160 L 320 160" stroke="#B0BCAA" stroke-width="6" fill="none" opacity="0.45" />
+    <text x="14" y="124" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="1.1" fill="#0E2A20" opacity="0.55">CHICAGO RIVER</text>
+    <g stroke="#0E2A20" stroke-width="0.5" opacity="0.18">
+      ${Array.from({length: 9}, (_,i) => `<line x1="${30+i*36}" y1="0" x2="${30+i*36}" y2="420"/>`).join("")}
+      ${Array.from({length: 11}, (_,i) => `<line x1="0" y1="${30+i*36}" x2="320" y2="${30+i*36}"/>`).join("")}
+    </g>
+    <rect x="60" y="140" width="200" height="220" stroke="#0E2A20" stroke-width="1.2" stroke-dasharray="3 3" fill="none" opacity="0.5" />
+    <text x="64" y="378" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.2" fill="#0E2A20" opacity="0.65">THE LOOP</text>
+    <circle cx="160" cy="200" r="40"  stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.6" />
+    <circle cx="160" cy="200" r="80"  stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.4" />
+    <circle cx="160" cy="200" r="125" stroke="var(--accent)" stroke-width="0.8" fill="none" opacity="0.25" />
+    <line x1="160" y1="200" x2="105" y2="245" stroke="#0E2A20" stroke-width="1" opacity="0.55"/>
+    <line x1="160" y1="200" x2="225" y2="170" stroke="#0E2A20" stroke-width="1" opacity="0.55"/>
+    <line x1="160" y1="200" x2="200" y2="280" stroke="#0E2A20" stroke-width="1" opacity="0.55"/>
+    <line x1="160" y1="200" x2="100" y2="180" stroke="#0E2A20" stroke-width="1" opacity="0.55"/>
+    <line x1="160" y1="200" x2="245" y2="225" stroke="#0E2A20" stroke-width="1" opacity="0.55"/>
+    <circle cx="105" cy="245" r="3.5" fill="#0E2A20"/>
+    <circle cx="225" cy="170" r="3.5" fill="#0E2A20"/>
+    <circle cx="200" cy="280" r="3.5" fill="#0E2A20"/>
+    <circle cx="100" cy="180" r="3.5" fill="#0E2A20"/>
+    <circle cx="245" cy="225" r="3.5" fill="#0E2A20"/>
+    <circle cx="160" cy="200" r="9" fill="var(--accent)"/>
+    <circle cx="160" cy="200" r="9" fill="none" stroke="var(--accent)" stroke-width="1">
+      <animate attributeName="r" from="9" to="22" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </svg>
+  <div class="map-pin-label farm" style="left: 40%; top: 47.6%;">FARM02 · 125 S. WACKER</div>
+  <div class="map-pin-label" style="left: 26.3%; top: 58.3%;">DELOITTE</div>
+  <div class="map-pin-label" style="left: 56.3%; top: 40.5%;">JUMP TRADING</div>
+  <div class="map-pin-label" style="left: 50%;   top: 66.7%;">BLUE PLATE</div>
+`;
+
+/* Reveal */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
+}, { threshold: 0.15 });
+document.querySelectorAll(".section, .hero, .cycle, .partners, .manifesto, .newsletter, .shop").forEach(el => {
+  el.classList.add("reveal");
+  io.observe(el);
+});
+</script>
+
+<template id="__bundler_thumbnail" data-bg-color="#0E2A20">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#0E2A20"/>
+    <g transform="translate(180,340) scale(0.5)" fill="#00F464">
+      <path d="M103.2,103.4h135.8s0,32.6,0,32.6h-88.7c-2.5,0-4.7.9-6.5,2.6-1.8,1.8-2.6,3.9-2.6,6.5v32.9c0,2.5.9,4.7,2.6,6.5,1.8,1.8,3.9,2.6,6.5,2.6h83.7s0,32.6,0,32.6h-83.7c-2.5,0-4.7.9-6.5,2.6-1.8,1.8-2.6,3.9-2.6,6.5v80.2s-37.9,0-37.9,0V103.4Z"/>
+      <path d="M308.1,103.2h38.5s73.8,205.7,73.8,205.7h-39.7s-13.8-40-13.8-40c-1-2.5-2.3-4.5-4-5.7-1.7-1.3-3.9-1.9-6.6-1.9h-57.9c-5.7,0-9.3,2.5-10.9,7.6l-13.8,40h-39.4s73.8-205.7,73.8-205.7ZM303.1,226.3c1.2,1.6,3.1,2.3,5.9,2.3h36.4c2.5,0,4.4-.8,5.6-2.3,1.2-1.6,1.4-3.7.6-6.5l-19.4-56.1c-.6-2.2-1.5-3.6-2.8-4.3-1.3-.7-2.6-.7-4,0s-2.3,2.1-2.9,4.3l-20,56.1c-.8,2.7-.6,4.9.6,6.5Z"/>
+      <path d="M444.4,103.4h83.7c13.5,0,25.4,2.4,35.6,7.3,10.2,4.9,18,11.8,23.5,20.7,5.5,8.9,8.2,19.4,8.2,31.3,0,11.9-3.1,22.3-9.4,31-6.3,8.7-14.3,15.2-24.1,19.5-2.7,1.4-4.4,3-5,4.9-.6,1.9-.2,4.2,1.2,6.9l49.4,84h-45.5s-36.4-68.5-36.4-68.5c-3.1-5.3-6-8.9-8.7-10.9-2.6-2-6.2-2.9-10.7-2.9h-16.5c-2.6,0-4.4.7-5.6,2.2s-1.8,3.7-1.8,6.6v73.5s-37.9,0-37.9,0V103.4ZM548.1,186.5c6.1-5.2,9.1-12.4,9.1-21.6,0-9-2.9-16.1-8.8-21.2-5.9-5.1-13.6-7.6-23.2-7.6h-34.1c-2.7,0-4.9.8-6.5,2.3-1.6,1.6-2.4,3.7-2.4,6.5v40.6c0,2.7.8,4.9,2.4,6.5,1.6,1.6,3.7,2.3,6.5,2.3h32.6c10.2,0,18.3-2.6,24.4-7.8Z"/>
+      <path d="M635.5,103.4h46.7s52,139.6,52,139.6c1.2,3.1,2.9,4.7,5.3,4.7,2.3,0,4.2-1.6,5.6-4.7l51.7-139.6h46.4s0,205.7,0,205.7h-36.4s.3-119.9.3-119.9c0-2-.6-3.4-1.8-4.4-1.2-1-2.5-1.2-3.8-.7-1.4.5-2.4,1.6-3.2,3.4l-45,121.7h-27.9s-45-121.7-45-121.7c-.8-1.8-1.9-2.9-3.2-3.4-1.4-.5-2.6-.2-3.8.7-1.2,1-1.8,2.5-1.8,4.7l.6,119.6h-36.7s0-205.7,0-205.7Z"/>
+    </g>
+  </svg>
+</template>
+</body>
+</html>

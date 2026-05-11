@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nutrition — FARMZER0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css?v=3" />
+<script src="img-fallback.js"></script>
+<style>
+  /* ——— Hero ——— */
+  .nutri-hero { padding: 88px 0 56px; border-bottom: 1px solid var(--line); }
+  .nutri-hero .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest); opacity: 0.65; margin-bottom: 24px; }
+  .nutri-hero h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(48px, 6.4vw, 104px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--forest);
+    margin: 0;
+    max-width: 16ch;
+  }
+  .nutri-hero h1 em { font-style: italic; color: var(--accent); }
+  .nutri-hero .sub {
+    margin-top: 36px; max-width: 56ch;
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: clamp(20px, 1.7vw, 26px); line-height: 1.35; color: var(--forest);
+  }
+  .nutri-hero .hero-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 64px; align-items: end; padding-bottom: 28px; }
+  .nutri-hero .meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding-top: 16px; border-top: 1px solid var(--line); }
+  .nutri-hero .meta .v { font-family: "Instrument Serif", serif; font-size: 40px; line-height: 1; color: var(--forest); letter-spacing: -0.02em; }
+  .nutri-hero .meta .v em { font-style: italic; color: var(--accent); }
+  .nutri-hero .meta .l { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.7; margin-top: 8px; }
+  @media (max-width: 880px) {
+    .nutri-hero .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+  }
+
+  /* ——— Filter section ——— */
+  .filter-section { padding: 64px 0 96px; }
+  .filter-layout { display: grid; grid-template-columns: 280px 1fr; gap: 64px; align-items: start; }
+  @media (max-width: 960px) { .filter-layout { grid-template-columns: 1fr; gap: 40px; } }
+
+  .nutri-rail h3 {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--forest); opacity: 0.75; margin: 0 0 20px;
+    padding-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .nutri-rail .group-title {
+    font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--forest); opacity: 0.55;
+    margin: 22px 0 10px;
+  }
+  .nutri-chips { display: flex; flex-direction: column; gap: 4px; }
+  .nutri-chip {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px; background: transparent;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-family: "Geist", sans-serif; font-size: 13px; font-weight: 500;
+    color: var(--forest); cursor: pointer; transition: all 180ms ease;
+    text-align: left; width: 100%; letter-spacing: -0.005em;
+  }
+  .nutri-chip:hover { border-color: var(--forest); }
+  .nutri-chip.active {
+    background: var(--forest); color: var(--cream); border-color: var(--forest);
+  }
+  .nutri-chip.active .count { color: var(--accent); }
+  .nutri-chip .count {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    opacity: 0.7; letter-spacing: 0.04em;
+  }
+  .nutri-chip.disabled { opacity: 0.32; cursor: not-allowed; }
+
+  .clear-btn {
+    margin-top: 24px; width: 100%; padding: 11px 14px;
+    background: transparent; border: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--forest);
+    cursor: pointer; transition: all 160ms ease; opacity: 0.5;
+  }
+  .clear-btn.has-selection { opacity: 1; border-color: var(--forest); }
+  .clear-btn:hover.has-selection { background: var(--forest); color: var(--cream); }
+
+  /* ——— Product grid ——— */
+  .results-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 32px;
+  }
+  .results-head .count-lg {
+    font-family: "Instrument Serif", serif; font-size: 32px; color: var(--forest); letter-spacing: -0.01em;
+  }
+  .results-head .count-lg em { font-style: italic; color: var(--accent); }
+  .results-head .active-list {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--forest); opacity: 0.7; text-align: right; max-width: 60%;
+  }
+
+  .nutri-products { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  @media (max-width: 720px) { .nutri-products { grid-template-columns: 1fr; } }
+  .n-card {
+    background: var(--paper); border: 1px solid var(--line);
+    padding: 28px; display: flex; flex-direction: column; gap: 18px;
+    text-decoration: none; color: var(--forest);
+    transition: all 220ms ease;
+  }
+  .n-card:hover { border-color: var(--forest); transform: translateY(-2px); }
+  .n-card .top { display: flex; justify-content: space-between; align-items: baseline; }
+  .n-card .name { font-family: "Instrument Serif", serif; font-size: 30px; line-height: 1; letter-spacing: -0.01em; }
+  .n-card .price { font-family: "JetBrains Mono", monospace; font-size: 14px; color: var(--forest); }
+  .n-card .meta-row {
+    display: flex; gap: 12px; font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.65;
+  }
+  .n-card .nutrients { display: flex; flex-wrap: wrap; gap: 6px; }
+  .n-card .nut-tag {
+    display: inline-flex; align-items: center; padding: 5px 10px;
+    border: 1px solid var(--line); border-radius: 999px;
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: var(--forest); opacity: 0.85;
+    transition: all 180ms ease;
+  }
+  .n-card .nut-tag.match { background: var(--accent); color: var(--forest); border-color: var(--accent); opacity: 1; font-weight: 600; }
+  .n-card .density {
+    display: flex; align-items: center; gap: 12px; padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+  .n-card .density .label {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.6; flex: none;
+  }
+  .n-card .bar { flex: 1; height: 3px; background: var(--line); position: relative; }
+  .n-card .bar .fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--forest); }
+  .n-card .x { font-family: "Instrument Serif", serif; font-style: italic; font-size: 18px; color: var(--forest); }
+  .n-card .x em { color: var(--accent); }
+
+  .empty-state {
+    padding: 64px 0; text-align: center; border: 1px dashed var(--line);
+  }
+  .empty-state h3 {
+    font-family: "Instrument Serif", serif; font-style: italic; font-size: 32px;
+    color: var(--forest); margin: 0 0 8px;
+  }
+  .empty-state p {
+    font-family: "JetBrains Mono", monospace; font-size: 11px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.6;
+  }
+
+  /* ——— Nutrient detail panel ——— */
+  .nutri-detail {
+    margin-top: 48px; padding: 32px; background: var(--paper); border: 1px solid var(--line);
+    display: none;
+  }
+  .nutri-detail.show { display: block; }
+  .nutri-detail .lead {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--forest); opacity: 0.65; margin-bottom: 12px;
+  }
+  .nutri-detail h4 {
+    font-family: "Instrument Serif", serif; font-weight: 400; font-size: 36px;
+    margin: 0 0 16px; color: var(--forest); letter-spacing: -0.01em;
+  }
+  .nutri-detail h4 em { font-style: italic; color: var(--accent); }
+  .nutri-detail p {
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: 20px; line-height: 1.5; color: var(--forest); margin: 0; max-width: 60ch;
+  }
+</style>
+</head>
+<body>
+
+<!-- Live status strip -->
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Urban Agricultural and Food is Medicine Revolution in Chicago.</b></span><span class="sep">✻</span>
+      <span><b>Welcome to the Urban Agricultural and Food is Medicine Revolution in Chicago.</b></span><span class="sep">✻</span>
+      <span><b>Welcome to the Urban Agricultural and Food is Medicine Revolution in Chicago.</b></span><span class="sep">✻</span>
+      <span><b>Welcome to the Urban Agricultural and Food is Medicine Revolution in Chicago.</b></span><span class="sep">✻</span>
+    </div>
+  </div>
+</div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="index.html" class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></a>
+    <nav class="nav">
+      <a href="index.html#shop">Shop</a>
+      <a href="the-farm.html">The Farm</a>
+      <a href="nutrition.html" class="active">Nutrition</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · <span id="bag-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="nutri-hero" data-screen-label="01 Hero">
+  <div class="wrap">
+    <div class="eyebrow">FARM01 / NUTRITION INDEX · 2025</div>
+    <div class="hero-grid">
+      <div>
+        <h1>Explore products <em>by nutrients.</em></h1>
+        <p class="sub">
+          Microgreens deliver 4–40× the nutrient density of mature plants.
+          Pick what your body's looking for — we'll show you the shelf.
+        </p>
+      </div>
+      <div class="meta">
+        <div><div class="v"><em id="m-products">9</em></div><div class="l">Products</div></div>
+        <div><div class="v"><em id="m-nutrients">15</em></div><div class="l">Nutrients indexed</div></div>
+        <div><div class="v"><em>40×</em></div><div class="l">Peak density vs. mature</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Filter + Products -->
+<section class="filter-section">
+  <div class="wrap">
+    <div class="filter-layout">
+
+      <aside class="nutri-rail" data-screen-label="02 Nutrient rail">
+        <h3>Filter by nutrient</h3>
+
+        <div class="group-title">Vitamins</div>
+        <div class="nutri-chips" id="grp-vitamins"></div>
+
+        <div class="group-title">Minerals</div>
+        <div class="nutri-chips" id="grp-minerals"></div>
+
+        <div class="group-title">Macros</div>
+        <div class="nutri-chips" id="grp-macros"></div>
+
+        <div class="group-title">Phytonutrients</div>
+        <div class="nutri-chips" id="grp-phyto"></div>
+
+        <button class="clear-btn" id="clear-btn">Clear filters</button>
+      </aside>
+
+      <div class="nutri-results" data-screen-label="03 Results">
+        <div class="results-head">
+          <div class="count-lg"><em id="count">9</em> products</div>
+          <div class="active-list" id="active-list">Showing all</div>
+        </div>
+
+        <div class="nutri-detail" id="detail">
+          <div class="lead">About this nutrient</div>
+          <h4 id="detail-name"></h4>
+          <p id="detail-desc"></p>
+        </div>
+
+        <div class="nutri-products" id="products"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+      <p>Vacant office to urban farm. Chicago, IL.</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="index.html#shop">Microgreens</a></li>
+          <li><a href="index.html#shop">Specialty blends</a></li>
+          <li><a href="index.html#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Nutrition</h4>
+        <ul>
+          <li><a href="nutrition.html">Browse by nutrient</a></li>
+          <li><a href="#">Food as medicine</a></li>
+          <li><a href="#">Lab reports</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="the-farm.html">The farm</a></li>
+          <li><a href="about.html">Our story</a></li>
+          <li><a href="about.html#timeline">Milestones</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="mono">© 2025 FARMZER0 LLC</span>
+      <span class="mono">FARM01 · LOOP · CHICAGO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ——— Data ——— */
+const NUTRIENTS = [
+  // group, key, label, desc
+  { g: "vitamins", k: "vitC",   label: "Vitamin C",   desc: "Antioxidant. Collagen synthesis, immune defense, iron absorption." },
+  { g: "vitamins", k: "vitK",   label: "Vitamin K",   desc: "Clotting and bone metabolism. Microgreens are among the densest sources." },
+  { g: "vitamins", k: "vitE",   label: "Vitamin E",   desc: "Fat-soluble antioxidant. Protects cell membranes, skin and nerve tissue." },
+  { g: "vitamins", k: "vitA",   label: "Vitamin A",   desc: "Vision, immune function, skin. From beta-carotene in dark greens." },
+  { g: "vitamins", k: "folate", label: "Folate (B9)", desc: "DNA synthesis and cell division. Critical pre- and during pregnancy." },
+  { g: "vitamins", k: "b6",     label: "B-Vitamins",  desc: "B1, B2, B6 — energy metabolism, neurotransmitter production." },
+
+  { g: "minerals", k: "iron",   label: "Iron",        desc: "Oxygen transport in blood. Pairs with vitamin C for absorption." },
+  { g: "minerals", k: "calcium",label: "Calcium",     desc: "Bone density, muscle contraction, nerve signaling." },
+  { g: "minerals", k: "mg",     label: "Magnesium",   desc: "300+ enzyme reactions. Sleep, mood, muscle recovery." },
+  { g: "minerals", k: "zinc",   label: "Zinc",        desc: "Immune function, wound healing, taste and smell." },
+  { g: "minerals", k: "potass", label: "Potassium",   desc: "Blood pressure regulation. Counters sodium." },
+
+  { g: "macros", k: "protein", label: "Protein",     desc: "Plant protein with complete amino acid profile in some varieties." },
+  { g: "macros", k: "fiber",   label: "Fiber",       desc: "Gut health, blood-sugar steadiness, satiety." },
+
+  { g: "phyto", k: "sulforaphane", label: "Sulforaphane",  desc: "Found at 50–100× the levels of mature broccoli. Activates Nrf2 detox pathway." },
+  { g: "phyto", k: "polyphenols",  label: "Polyphenols",   desc: "Plant defense compounds. Anti-inflammatory; feed gut microbiome." },
+  { g: "phyto", k: "antiox",       label: "Antioxidants",  desc: "Neutralize free radicals. Microgreens score 4–40× higher than mature plants." },
+  { g: "phyto", k: "glucos",       label: "Glucosinolates",desc: "Sulfur compounds in brassicas. Precursor to sulforaphane and isothiocyanates." },
+  { g: "phyto", k: "chloro",       label: "Chlorophyll",   desc: "Binds toxins. Blood-builder. Highest in young, just-harvested greens." },
+];
+
+const PRODUCTS = [
+  { name: "Baller Mix",       size: "2 oz", price: "$8",  density: 0.92,
+    link: "baller-mix.html",
+    nuts: ["vitC","vitK","folate","iron","fiber","antiox","sulforaphane","chloro"] },
+  { name: "Pea Shoots",       size: "2 oz", price: "$7",  density: 0.78,
+    link: "#",
+    nuts: ["vitC","folate","b6","fiber","protein","chloro","antiox"] },
+  { name: "Broccoli Greens",  size: "2 oz", price: "$9",  density: 0.95,
+    link: "#",
+    nuts: ["vitC","vitK","sulforaphane","glucos","antiox","fiber","chloro"] },
+  { name: "Wasabi Greens",    size: "1 oz", price: "$11", density: 0.62,
+    link: "#",
+    nuts: ["vitC","calcium","glucos","antiox","sulforaphane"] },
+  { name: "Sunflower Shoots", size: "2 oz", price: "$7",  density: 0.74,
+    link: "#",
+    nuts: ["protein","vitE","mg","zinc","b6","fiber"] },
+  { name: "Daikon Radish",    size: "1 oz", price: "$9",  density: 0.68,
+    link: "#",
+    nuts: ["vitC","glucos","sulforaphane","potass","antiox"] },
+  { name: "Red Cabbage",      size: "2 oz", price: "$8",  density: 0.81,
+    link: "#",
+    nuts: ["vitC","vitK","antiox","polyphenols","glucos","fiber"] },
+  { name: "Cilantro",         size: "1 oz", price: "$9",  density: 0.71,
+    link: "#",
+    nuts: ["vitA","vitK","chloro","antiox","polyphenols"] },
+  { name: "Longevity Mix",    size: "2 oz", price: "$9",  density: 0.88,
+    link: "#",
+    nuts: ["polyphenols","antiox","vitK","folate","mg","fiber","chloro"] },
+];
+
+/* ——— State ——— */
+const selected = new Set();
+
+/* ——— Render rails ——— */
+function nutrientCount(k) { return PRODUCTS.filter(p => p.nuts.includes(k)).length; }
+
+function renderRails() {
+  const groups = { vitamins: [], minerals: [], macros: [], phyto: [] };
+  NUTRIENTS.forEach(n => groups[n.g].push(n));
+  const map = { vitamins: "grp-vitamins", minerals: "grp-minerals", macros: "grp-macros", phyto: "grp-phyto" };
+  Object.entries(groups).forEach(([g, list]) => {
+    document.getElementById(map[g]).innerHTML = list.map(n =>
+      `<button class="nutri-chip" data-k="${n.k}">
+         <span>${n.label}</span>
+         <span class="count">${nutrientCount(n.k).toString().padStart(2,"0")}</span>
+       </button>`
+    ).join("");
+  });
+  document.querySelectorAll(".nutri-chip").forEach(btn => {
+    btn.addEventListener("click", () => toggle(btn.dataset.k));
+  });
+}
+
+/* ——— Filter ——— */
+function matchedProducts() {
+  if (selected.size === 0) return PRODUCTS;
+  return PRODUCTS.filter(p => [...selected].every(k => p.nuts.includes(k)));
+}
+
+function toggle(k) {
+  if (selected.has(k)) selected.delete(k);
+  else selected.add(k);
+  render();
+}
+
+function clearAll() {
+  selected.clear();
+  render();
+}
+
+/* ——— Render products ——— */
+function nutLabel(k) { return (NUTRIENTS.find(n => n.k === k) || {}).label || k; }
+
+function render() {
+  // chips
+  document.querySelectorAll(".nutri-chip").forEach(btn => {
+    const k = btn.dataset.k;
+    btn.classList.toggle("active", selected.has(k));
+  });
+  // clear button
+  const clr = document.getElementById("clear-btn");
+  clr.classList.toggle("has-selection", selected.size > 0);
+  clr.textContent = selected.size > 0 ? `Clear (${selected.size})` : "Clear filters";
+
+  // results
+  const matched = matchedProducts();
+  document.getElementById("count").textContent = matched.length;
+  const head = document.getElementById("active-list");
+  head.textContent = selected.size === 0
+    ? "Showing all"
+    : "Matching · " + [...selected].map(nutLabel).join(" + ");
+
+  // detail (single selection only)
+  const detail = document.getElementById("detail");
+  if (selected.size === 1) {
+    const n = NUTRIENTS.find(x => x.k === [...selected][0]);
+    document.getElementById("detail-name").innerHTML = `${n.label}<em>.</em>`;
+    document.getElementById("detail-desc").textContent = n.desc;
+    detail.classList.add("show");
+  } else {
+    detail.classList.remove("show");
+  }
+
+  // products
+  const grid = document.getElementById("products");
+  if (matched.length === 0) {
+    grid.innerHTML = '';
+    grid.insertAdjacentHTML('beforebegin',
+      `<div class="empty-state" id="empty">
+         <h3>No matches.</h3>
+         <p>Try removing a filter</p>
+       </div>`
+    );
+    const existing = document.getElementById("empty");
+    if (existing && existing !== grid.previousElementSibling) {
+      existing.remove();
+    }
+  } else {
+    const e = document.getElementById("empty"); if (e) e.remove();
+    grid.innerHTML = matched.map(p => `
+      <a class="n-card" href="${p.link}">
+        <div class="top">
+          <div class="name">${p.name}</div>
+          <div class="price">${p.price}</div>
+        </div>
+        <div class="meta-row">
+          <span>${p.size}</span><span>·</span>
+          <span>${p.nuts.length} nutrients</span>
+        </div>
+        <div class="nutrients">
+          ${p.nuts.map(k =>
+            `<span class="nut-tag ${selected.has(k) ? "match" : ""}">${nutLabel(k)}</span>`
+          ).join("")}
+        </div>
+        <div class="density">
+          <span class="label">Nutrient density</span>
+          <span class="bar"><span class="fill" style="width:${Math.round(p.density*100)}%"></span></span>
+          <span class="x"><em>${(p.density*40).toFixed(0)}×</em></span>
+        </div>
+      </a>
+    `).join("");
+  }
+}
+
+document.getElementById("clear-btn").addEventListener("click", clearAll);
+renderRails();
+render();
+
+// hero stats
+document.getElementById("m-products").textContent = PRODUCTS.length;
+document.getElementById("m-nutrients").textContent = NUTRIENTS.length;
+</script>
+
+</body>
+</html>

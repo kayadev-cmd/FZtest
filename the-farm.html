@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Farm — FARMZER0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<script src="img-fallback.js"></script>
+<style>
+  /* Hero */
+  .farm-hero {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 96px 0 0;
+    overflow: hidden;
+  }
+  .farm-hero h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(64px, 10vw, 184px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin: 16px 0 32px;
+  }
+  .farm-hero h1 em { font-style: italic; color: var(--gold-soft); }
+  .farm-hero .lede {
+    max-width: 52ch;
+    font-size: 18px;
+    line-height: 1.45;
+    opacity: 0.92;
+    margin: 0 0 64px;
+  }
+  .farm-hero .img-frame {
+    aspect-ratio: 21/9;
+    width: 100%;
+  }
+  .farm-hero .eyebrow { color: var(--gold-soft); opacity: 1; }
+
+  /* Floor diagram */
+  .floor {
+    background: var(--paper);
+  }
+  .floor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 64px;
+  }
+  .floor h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 24px;
+  }
+  .floor h2 em { font-style: italic; color: var(--accent); }
+  .floor-zones {
+    list-style: none;
+    padding: 0;
+    margin: 24px 0 0;
+  }
+  .floor-zones li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    padding: 14px 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .floor-zones li:last-child { border-bottom: 1px solid var(--line); }
+  .floor-zones .num {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    color: var(--accent);
+    font-size: 18px;
+  }
+  .floor-zones b {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 22px;
+  }
+  .floor-zones .meta {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--forest);
+    opacity: 0.7;
+    text-transform: uppercase;
+    grid-column: 2 / -1;
+    margin-top: -2px;
+  }
+  .floor-zones .key {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--forest);
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  .floor-canvas {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    aspect-ratio: 5/4;
+    position: relative;
+  }
+  .floor-canvas svg { width: 100%; height: 100%; display: block; }
+
+  @media (max-width: 980px) {
+    .floor-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Grow wall live */
+  .grow-wall {
+    background: var(--forest);
+    color: var(--cream);
+  }
+  .grow-wall-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 32px;
+  }
+  .grow-wall-head h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    margin: 8px 0 0;
+    letter-spacing: -0.01em;
+  }
+  .grow-wall-head h2 em { font-style: italic; color: var(--gold-soft); }
+  .gw-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 4px;
+    aspect-ratio: 16/8;
+    background: rgba(7,24,15,0.6);
+    padding: 4px;
+  }
+  .gw-cell {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0F2418 0%, #19392A 100%);
+  }
+  .gw-cell .leaf {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, #4A8F4A 0%, #1F5530 100%);
+    transition: height 1.6s ease;
+  }
+  .gw-cell .label {
+    position: absolute; top: 4px; left: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px; letter-spacing: 0.06em;
+    color: rgba(242,237,227,0.55);
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .gw-cell .ready {
+    position: absolute; bottom: 6px; right: 6px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold);
+    z-index: 2;
+    box-shadow: 0 0 10px var(--gold);
+  }
+  .gw-readout {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(242,237,227,0.18);
+  }
+  .gw-readout .v {
+    font-family: "Instrument Serif", serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--gold-soft);
+  }
+  .gw-readout .l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 880px) {
+    .gw-grid { grid-template-columns: repeat(4, 1fr); aspect-ratio: 4/4; }
+    .gw-readout { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Process */
+  .process {
+    padding: 96px 0;
+  }
+  .process h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 64px;
+    max-width: 18ch;
+  }
+  .process h2 em { font-style: italic; color: var(--accent); }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .step {
+    padding: 32px 24px 32px 0;
+    border-right: 1px solid var(--line);
+    position: relative;
+  }
+  .step:last-child { border-right: none; }
+  .step .day {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .step .num {
+    font-family: "Instrument Serif", serif;
+    font-size: 80px; line-height: 1;
+    color: var(--forest);
+    letter-spacing: -0.02em;
+    margin: 12px 0 18px;
+  }
+  .step h3 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.05;
+    margin: 0 0 8px;
+  }
+  .step p { font-size: 13px; line-height: 1.5; color: var(--forest); margin: 0; }
+  @media (max-width: 980px) {
+    .steps { grid-template-columns: 1fr 1fr; }
+    .step { border-bottom: 1px solid var(--line); }
+    .step:nth-child(2n) { border-right: none; }
+  }
+
+  /* Story / why we exist */
+  .story {
+    background: var(--cream);
+    padding: 96px 0;
+  }
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: start;
+  }
+  .story h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 0;
+  }
+  .story h2 em { font-style: italic; color: var(--accent); }
+  .story p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--charcoal);
+    max-width: 50ch;
+  }
+  .story p + p { margin-top: 18px; }
+  .story p .pull {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 26px;
+    color: var(--forest);
+    line-height: 1.3;
+  }
+  @media (max-width: 880px) { .story-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* Quote */
+  .quote {
+    padding: 96px 0;
+    text-align: center;
+  }
+  .quote q {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: clamp(32px, 4.4vw, 56px);
+    line-height: 1.18;
+    color: var(--forest);
+    quotes: "\201C" "\201D";
+    display: block;
+    max-width: 24ch;
+    margin: 0 auto;
+  }
+  .quote q::before { content: open-quote; color: var(--accent); }
+  .quote q::after  { content: close-quote; color: var(--accent); }
+  .quote .attr {
+    margin-top: 24px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--forest); opacity: 0.7;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Top status strip -->
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+    </div>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="index.html" class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></a>
+    <nav class="nav">
+      <a href="index.html#shop">Shop</a>
+      <a href="the-farm.html" class="active">The Farm</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · 0
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="farm-hero" data-screen-label="01 Farm hero">
+  <div class="wrap">
+    <div class="eyebrow">THE FARM · 217 W. WACKER · CHICAGO</div>
+    <h1>An office floor,<br/><em>turned forest.</em></h1>
+    <p class="lede">
+      FARMZER0 takes a vacant office floor — fluorescent lights, drop ceilings,
+      cubicle ghosts — and rebuilds it as a transparent, high-tech farm.
+      Walk past the front desk on the 14th floor and the grow walls are right
+      there, working under pink-violet light, in a city that hasn't grown its own
+      food in over a hundred years.
+    </p>
+    <div class="img-frame">
+      <img src="https://images.unsplash.com/photo-1565647952915-9be7b1f6033b?w=1800&q=80" alt="Vertical farm interior" />
+      <span class="img-tag">FARM01 · GROW WALL 04 · DAY 6 · 11:08 AM</span>
+    </div>
+  </div>
+</section>
+
+<!-- Floor plan -->
+<section class="section floor" data-screen-label="02 Floor diagram">
+  <div class="wrap floor-grid">
+    <div>
+      <div class="eyebrow">FARM01 · FLOOR 14 · 24,000 SQFT</div>
+      <h2>What used to be<br/>a <em>law firm.</em></h2>
+      <ul class="floor-zones">
+        <li><span><b>Grow halls</b><div class="meta">8 walls · 14ft tall · 11,400 sqft</div></span><span class="key">A</span></li>
+        <li><span><b>Seed &amp; sprout lab</b><div class="meta">Climate-controlled · 24h cycle</div></span><span class="key">B</span></li>
+        <li><span><b>Harvest &amp; pack</b><div class="meta">Same-day sealing · 4°C cold chain</div></span><span class="key">C</span></li>
+        <li><span><b>Pickup counter</b><div class="meta">Open Tue–Sat · 7am–7pm</div></span><span class="key">D</span></li>
+        <li><span><b>Tour gallery</b><div class="meta">Public viewing window · always on</div></span><span class="key">E</span></li>
+      </ul>
+    </div>
+
+    <div class="floor-canvas">
+      <svg viewBox="0 0 500 400" preserveAspectRatio="xMidYMid meet">
+        <!-- floor outline -->
+        <rect x="20" y="20" width="460" height="360" fill="none" stroke="#0E2A20" stroke-width="1.4"/>
+        <!-- grow halls (A) - 8 columns -->
+        <g>
+          <rect x="40" y="50" width="280" height="220" fill="rgba(184,153,104,0.18)" stroke="#0E2A20" stroke-width="0.6"/>
+          <text x="44" y="44" font-family="JetBrains Mono, monospace" font-size="9" fill="#0E2A20" letter-spacing="1.2">A · GROW HALLS</text>
+          <!-- 8 wall slabs rendered by JS below -->
+        </g>
+        <!-- B seed lab -->
+        <rect x="340" y="50" width="120" height="100" fill="rgba(14,42,32,0.08)" stroke="#0E2A20" stroke-width="0.6"/>
+        <text x="344" y="44" font-family="JetBrains Mono, monospace" font-size="9" fill="#0E2A20" letter-spacing="1.2">B · SEED LAB</text>
+        <!-- C harvest -->
+        <rect x="340" y="170" width="120" height="100" fill="rgba(14,42,32,0.08)" stroke="#0E2A20" stroke-width="0.6"/>
+        <text x="344" y="164" font-family="JetBrains Mono, monospace" font-size="9" fill="#0E2A20" letter-spacing="1.2">C · HARVEST &amp; PACK</text>
+        <!-- D pickup counter -->
+        <rect x="40" y="290" width="200" height="80" fill="rgba(14,42,32,0.04)" stroke="#0E2A20" stroke-width="0.6"/>
+        <text x="44" y="284" font-family="JetBrains Mono, monospace" font-size="9" fill="#0E2A20" letter-spacing="1.2">D · PICKUP</text>
+        <text x="120" y="338" font-family="Instrument Serif, serif" font-style="italic" font-size="22" fill="#0E2A20">the counter</text>
+        <!-- E gallery -->
+        <rect x="260" y="290" width="200" height="80" fill="rgba(184,153,104,0.10)" stroke="#0E2A20" stroke-width="0.6"/>
+        <text x="264" y="284" font-family="JetBrains Mono, monospace" font-size="9" fill="#0E2A20" letter-spacing="1.2">E · GALLERY</text>
+        <text x="316" y="338" font-family="Instrument Serif, serif" font-style="italic" font-size="22" fill="#0E2A20">the window</text>
+
+        <!-- 8 grow walls -->
+        <g id="grow-walls"></g>
+
+        <!-- you-are-here -->
+        <circle cx="340" cy="320" r="6" fill="#B89968"/>
+        <circle cx="340" cy="320" r="6" fill="none" stroke="#B89968" stroke-width="1">
+          <animate attributeName="r" from="6" to="14" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- Story / why we exist -->
+<section class="story" data-screen-label="04 Why we exist">
+  <div class="wrap story-grid">
+    <div>
+      <div class="eyebrow">WHY WE EXIST</div>
+      <h2>Two broken systems.<br/><em>One fix.</em></h2>
+    </div>
+    <div>
+      <p>
+        The American food system runs on distance. Lettuce travels 1,400 miles
+        before a Chicagoan eats it. Fragile produce is picked early, sprayed,
+        boxed, trucked, and refrigerated for days — losing nutrients at every stop.
+      </p>
+      <p>
+        Meanwhile, downtown Chicago has the highest office vacancy on record.
+        Whole floors of beautiful buildings sit empty. Quiet. Useless.
+      </p>
+      <p class="pull">
+        FARMZER0 was built to fix both at once — turn the empty floors into farms,
+        and the long supply chain into a 14-floor elevator ride.
+      </p>
+      <p>
+        Our farms feed the people in the same building, the hospital across the
+        street, the catering company two blocks away. We measure success in feet,
+        not miles. In hours, not days.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Quote -->
+<section class="quote">
+  <div class="wrap-narrow">
+    <q>You can taste the difference between greens cut this morning<br/>and greens cut last Tuesday.</q>
+    <div class="attr">— Chef J. Alvarado · Blue Plate Catering</div>
+  </div>
+</section>
+
+<!-- Tour the farm (redesigned) -->
+<section class="tour" data-screen-label="05 Tour">
+  <style>
+    .tour { background: var(--cream); padding: 120px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .tour-head { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: end; margin-bottom: 56px; }
+    .tour-head h2 { font-family: "Instrument Serif", serif; font-weight: 400; font-size: clamp(48px, 6.4vw, 104px); line-height: 0.98; letter-spacing: -0.02em; margin: 12px 0 0; max-width: 14ch; }
+    .tour-head h2 em { font-style: italic; color: var(--accent); }
+    .tour-head .lede { font-family: "Instrument Serif", serif; font-style: italic; font-size: clamp(20px, 1.6vw, 24px); line-height: 1.4; color: var(--forest); max-width: 42ch; }
+    .tour-card-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+    .tour-card { padding: 32px 32px 32px 0; border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+    .tour-card:last-child { border-right: none; padding-right: 0; }
+    .tour-card .meta { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .tour-card .when { font-family: "Instrument Serif", serif; font-size: 44px; line-height: 1; letter-spacing: -0.02em; color: var(--forest); }
+    .tour-card .when em { font-style: italic; color: var(--accent); }
+    .tour-card p { font-size: 14px; line-height: 1.55; color: var(--charcoal); margin: 0; max-width: 32ch; }
+    .tour-foot { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+    .tour-foot .spots { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--forest); opacity: 0.75; }
+    .tour-foot .spots b { color: var(--accent); }
+    @media (max-width: 880px) {
+      .tour-head { grid-template-columns: 1fr; gap: 24px; }
+      .tour-card-row { grid-template-columns: 1fr; }
+      .tour-card { border-right: none; border-bottom: 1px solid var(--line); padding: 24px 0; }
+      .tour-card:last-child { border-bottom: none; }
+    }
+  </style>
+  <div class="wrap">
+    <div class="tour-head">
+      <div>
+        <div class="eyebrow">VISIT THE FARM · TUE–SAT</div>
+        <h2>Walk in.<br/>Take a <em>tour.</em></h2>
+      </div>
+      <p class="lede">
+        Every Friday at 4pm we pour wine, cut microgreens, and walk
+        twelve guests through the grow halls. No script — just questions and
+        scissors.
+      </p>
+    </div>
+
+    <div class="tour-card-row">
+      <div class="tour-card">
+        <span class="meta">01 · WHEN</span>
+        <div class="when">Every <em>Friday</em><br/>4:00 PM</div>
+        <p>Sixty minutes. Starts at the 14th-floor pickup counter, ends at the cutting table.</p>
+      </div>
+      <div class="tour-card">
+        <span class="meta">02 · WHAT</span>
+        <div class="when">Seed lab. Grow walls. <em>Wine.</em></div>
+        <p>Hands on the trays. Taste straight from the mat. Bring a bottle home with you.</p>
+      </div>
+      <div class="tour-card">
+        <span class="meta">03 · WHO</span>
+        <div class="when"><em>12</em> guests<br/>each week</div>
+        <p>Free. Capped on purpose — we want to actually talk to you, not run a tour bus.</p>
+      </div>
+    </div>
+
+    <div class="tour-foot">
+      <span class="spots">NEXT FRIDAY · <b>4 SPOTS LEFT</b> · PICKUP COUNTER OPEN TUE–SAT 7AM–7PM</span>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <a class="btn btn-dark" href="#book">Book a tour <span class="arrow">→</span></a>
+        <a class="btn btn-ghost" href="index.html#shop">Shop the harvest</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+        <p style="font-size: 14px; opacity: 0.85; max-width: 36ch; margin-top: 16px;">
+          Indoor urban farms inside the buildings where food is actually eaten.
+          Built in Chicago. Designed to scale.
+        </p>
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 24px;">
+          125 S. WACKER DRIVE<br/>CHICAGO IL 60606
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="index.html#shop">Microgreens</a></li>
+          <li><a href="index.html#shop">Specialty blends</a></li>
+          <li><a href="index.html#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#">Workplace dining</a></li>
+          <li><a href="#">Hospitals &amp; Food Rx</a></li>
+          <li><a href="#">Restaurants</a></li>
+          <li><a href="#">Residential</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="the-farm.html">The farm</a></li>
+          <li><a href="about.html">Our story</a></li>
+          <li><a href="about.html#timeline">Milestones</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-mark">FARMZER<span style="color: var(--gold);">0</span></div>
+    <div class="footer-bottom">
+      <span>© 2026 FARMZER0 · CHICAGO</span>
+      <span>GROWN HERE · EATEN HERE</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Floor plan: render 8 grow walls into the SVG */
+(function () {
+  const g = document.getElementById("grow-walls");
+  let s = "";
+  for (let i = 0; i < 8; i++) {
+    const x = 50 + i * 33;
+    s += `<rect x="${x}" y="70" width="20" height="180" fill="rgba(14,42,32,0.85)" />`;
+    s += `<rect x="${x}" y="${70 + 6 + (i%3)*8}" width="20" height="${160 - (i%3)*8}" fill="rgba(74,143,74,${0.4 + 0.1*(i%4)})" />`;
+  }
+  g.innerHTML = s;
+})();
+
+/* Live readouts (status strip is now a marquee) */
+function updateStrip() {
+  const t = 67.4 + Math.random() * 1.6;
+  const rh = 60 + Math.floor(Math.random() * 5);
+  const par = 400 + Math.floor(Math.random() * 35);
+  const roT = document.getElementById("ro-temp"); if (roT) roT.textContent = t.toFixed(1) + "°F";
+  const roR = document.getElementById("ro-rh"); if (roR) roR.textContent = rh + "%";
+  const roP = document.getElementById("ro-par"); if (roP) roP.textContent = par;
+}
+updateStrip();
+setInterval(updateStrip, 4000);
+
+/* Countdown to next harvest */
+let secs = 6 * 3600 + 24 * 60 + 18;
+function pad(n) { return n.toString().padStart(2,"0"); }
+setInterval(() => {
+  secs--;
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  document.getElementById("next-harvest").textContent = pad(h)+":"+pad(m)+":"+pad(s);
+}, 1000);
+
+/* Grow wall: animated cells with growing leaves */
+const gw = document.getElementById("gw-grid");
+const labels = ["P-01","S-02","B-03","C-04","R-05","M-06","K-07","A-08",
+                "P-09","S-10","B-11","C-12","R-13","M-14","K-15","A-16"];
+let cells = [];
+for (let i = 0; i < 16; i++) {
+  const cell = document.createElement("div");
+  cell.className = "gw-cell";
+  cell.innerHTML = `<span class="label">${labels[i]}</span><div class="leaf"></div>`;
+  gw.appendChild(cell);
+  cells.push(cell);
+}
+function tickWall() {
+  cells.forEach((c, i) => {
+    const leaf = c.querySelector(".leaf");
+    const target = 30 + Math.floor(Math.random() * 70);
+    leaf.style.height = target + "%";
+    if (target > 80 && !c.querySelector(".ready")) {
+      const r = document.createElement("span");
+      r.className = "ready";
+      c.appendChild(r);
+    } else if (target <= 80 && c.querySelector(".ready")) {
+      c.querySelector(".ready").remove();
+    }
+  });
+}
+tickWall();
+setInterval(tickWall, 3500);
+</script>
+
+</body>
+</html>

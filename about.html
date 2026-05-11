@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>About FARMZER0 — Vacant office → urban farm → healthier city.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<script src="img-fallback.js"></script>
+<style>
+  /* ——— About hero ——— */
+  .about-hero { padding: 88px 0 72px; }
+  .about-hero h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(56px, 8.4vw, 152px);
+    line-height: 0.94;
+    letter-spacing: -0.02em;
+    color: var(--forest);
+    margin: 24px 0 0;
+    max-width: 14ch;
+  }
+  .about-hero h1 em { font-style: italic; color: var(--accent); }
+  .about-hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px; align-items: end; padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+  .about-hero-grid .lede {
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: clamp(20px, 1.7vw, 26px); line-height: 1.35; color: var(--forest);
+    max-width: 38ch;
+  }
+  .about-hero .meta {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-top: 32px;
+  }
+  .about-hero .meta .v { font-family: "Instrument Serif", serif; font-size: 44px; line-height: 1; color: var(--forest); letter-spacing: -0.02em; }
+  .about-hero .meta .v em { font-style: italic; color: var(--accent); }
+  .about-hero .meta .l { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.7; margin-top: 8px; }
+  @media (max-width: 880px) {
+    .about-hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .about-hero .meta { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ——— Mission band ——— */
+  .mission {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 96px 0;
+  }
+  .mission p {
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(36px, 4.6vw, 68px);
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    margin: 0;
+    max-width: 22ch;
+  }
+  .mission p em { font-style: italic; color: var(--gold-soft); }
+  .mission .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold-soft); opacity: 0.85; margin-bottom: 24px;
+  }
+
+  /* ——— Why we exist ——— */
+  .why { padding: 120px 0; border-bottom: 1px solid var(--line); }
+  .why-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 96px; }
+  .why-grid h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.012em;
+    margin: 12px 0 0; max-width: 12ch;
+  }
+  .why-grid h2 em { font-style: italic; color: var(--accent); }
+  .why-grid .col p { font-size: 17px; line-height: 1.55; color: var(--charcoal); margin: 0 0 20px; }
+  .why-grid .col p.pull {
+    font-family: "Instrument Serif", serif; font-size: 28px; line-height: 1.25;
+    color: var(--forest); margin: 32px 0; font-style: italic;
+  }
+  @media (max-width: 980px) { .why-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ——— Equation ——— */
+  .equation {
+    background: var(--cream);
+    padding: 120px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .equation-row {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 24px;
+    align-items: stretch;
+    margin-top: 56px;
+  }
+  .eq-card {
+    background: var(--paper); border: 1px solid var(--line);
+    padding: 28px; min-height: 240px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .eq-card .num {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .eq-card h3 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: 36px; line-height: 1.05; letter-spacing: -0.01em; margin: 12px 0 8px;
+  }
+  .eq-card p { font-size: 14px; color: var(--forest); line-height: 1.5; margin: 0 0 16px; }
+  .eq-card .stat { font-family: "Instrument Serif", serif; font-style: italic; font-size: 32px; color: var(--accent); line-height: 1; }
+  .eq-arrow {
+    align-self: center;
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: 56px; color: var(--accent); line-height: 1;
+  }
+  @media (max-width: 980px) {
+    .equation-row { grid-template-columns: 1fr; gap: 12px; }
+    .eq-arrow { transform: rotate(90deg); align-self: center; padding: 8px 0; }
+  }
+  .eq-section-head {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end;
+  }
+  .eq-section-head h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.012em;
+    margin: 12px 0 0;
+  }
+  .eq-section-head h2 em { font-style: italic; color: var(--accent); }
+  .eq-section-head p { font-size: 16px; max-width: 44ch; color: var(--forest); margin: 0; }
+  @media (max-width: 880px) { .eq-section-head { grid-template-columns: 1fr; gap: 16px; } }
+
+  /* ——— Timeline ——— */
+  .timeline { padding: 120px 0; }
+  .timeline-head { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; margin-bottom: 64px; }
+  .timeline-head h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(44px, 5.4vw, 80px); line-height: 1; letter-spacing: -0.015em;
+    margin: 12px 0 0; max-width: 14ch;
+  }
+  .timeline-head h2 em { font-style: italic; color: var(--accent); }
+  .timeline-head .desc { font-size: 16px; max-width: 44ch; color: var(--forest); }
+  @media (max-width: 880px) { .timeline-head { grid-template-columns: 1fr; gap: 16px; } }
+
+  .tl {
+    position: relative;
+    padding-left: 56px;
+  }
+  .tl::before {
+    content: "";
+    position: absolute;
+    left: 16px; top: 0; bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  .tl-item {
+    position: relative;
+    padding: 0 0 56px;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-item::before {
+    content: "";
+    position: absolute;
+    left: -47px; top: 8px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 2px solid var(--accent);
+  }
+  .tl-item.now::before {
+    background: var(--accent);
+    box-shadow: 0 0 0 6px rgba(184, 153, 104, 0.18);
+  }
+  .tl-item .date {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .tl-item h3 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(28px, 3vw, 40px); line-height: 1.05; letter-spacing: -0.01em;
+    margin: 8px 0 12px; max-width: 22ch;
+  }
+  .tl-item h3 em { font-style: italic; color: var(--forest); }
+  .tl-item p { font-size: 16px; line-height: 1.5; color: var(--charcoal); margin: 0; max-width: 56ch; }
+  .tl-item .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .tl-item .chip {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 5px 10px; border: 1px solid var(--line);
+    background: var(--paper); color: var(--forest);
+  }
+  .tl-item .chip.solid { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+  .tl-item .chip.gold  { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+
+  /* ——— Food Is Medicine ——— */
+  .fim {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 120px 0;
+  }
+  .fim-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 80px; align-items: start; }
+  .fim h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 76px); line-height: 1.0; letter-spacing: -0.015em;
+    margin: 12px 0 24px;
+  }
+  .fim h2 em { font-style: italic; color: var(--gold-soft); }
+  .fim p { font-size: 17px; line-height: 1.55; opacity: 0.86; margin: 0 0 18px; max-width: 50ch; }
+  .fim .partners-list {
+    display: grid; grid-template-columns: 1fr; gap: 0;
+    border-top: 1px solid rgba(242,237,227,0.16);
+  }
+  .fim .partners-list .row {
+    display: grid; grid-template-columns: auto 1fr; gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(242,237,227,0.16);
+  }
+  .fim .partners-list .row .k {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold-soft); min-width: 80px;
+  }
+  .fim .partners-list .row .v {
+    font-family: "Instrument Serif", serif; font-size: 22px; line-height: 1.2;
+  }
+  @media (max-width: 980px) { .fim-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ——— Promise ——— */
+  .promise {
+    text-align: center;
+    padding: 120px 0;
+    background: var(--cream);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .promise h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(48px, 7.5vw, 128px);
+    line-height: 1; letter-spacing: -0.02em;
+    margin: 16px 0 64px; color: var(--forest);
+  }
+  .promise h2 em { font-style: italic; color: var(--accent); }
+  .promise-words {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .promise-words div {
+    padding: 32px 16px;
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(20px, 2.4vw, 32px);
+    line-height: 1.0;
+    color: var(--forest);
+    border-right: 1px solid var(--line);
+  }
+  .promise-words div:last-child { border-right: none; }
+  .promise-words div em { font-style: italic; color: var(--accent); display: block; font-size: 0.85em; margin-top: 6px; }
+  @media (max-width: 880px) {
+    .promise-words { grid-template-columns: 1fr 1fr; }
+    .promise-words div { border-bottom: 1px solid var(--line); }
+    .promise-words div:nth-child(2n) { border-right: none; }
+  }
+
+  /* ——— CTA band ——— */
+  .cta {
+    padding: 120px 0;
+    text-align: center;
+  }
+  .cta h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(48px, 6.4vw, 104px);
+    line-height: 1; letter-spacing: -0.02em;
+    margin: 16px 0 24px; color: var(--forest);
+  }
+  .cta h2 em { font-style: italic; color: var(--accent); }
+  .cta p { font-size: 17px; max-width: 50ch; margin: 0 auto 32px; color: var(--forest); }
+  .cta-buttons { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- Live status strip -->
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="index.html" class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></a>
+    <nav class="nav">
+      <a href="index.html#shop">Shop</a>
+      <a href="the-farm.html">The Farm</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a href="about.html" class="active">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · 0
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- About hero -->
+<section class="about-hero" data-screen-label="01 About hero">
+  <div class="wrap">
+    <div class="about-hero-grid">
+      <div>
+        <div class="eyebrow">ABOUT FARMZER0 · CHICAGO · EST. 2024</div>
+        <h1>A new kind of <em>city.</em></h1>
+      </div>
+      <div class="lede">
+        FARMZER0 turns vacant downtown floors into transparent, high-tech farms —
+        growing fresh food close to the people, employers, hospitals, and
+        communities it serves. Chicago is our starting point. The model is built to scale.
+      </div>
+    </div>
+    <div class="meta">
+      <div><div class="v"><em>July 2024</em></div><div class="l">First farm operational · 30 N LaSalle</div></div>
+      <div><div class="v"><em>9,023</em><span style="font-family:'JetBrains Mono',monospace; font-size:14px; opacity: 0.6;"> sqft</span></div><div class="l">New flagship · 125 S. Wacker</div></div>
+      <div><div class="v"><em>$4M</em></div><div class="l">Seed round · in progress</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission -->
+<section class="mission" data-screen-label="02 Mission">
+  <div class="wrap">
+    <div class="label">Our Mission</div>
+    <p>
+      To make cities healthier, more resilient, and more <em>self-sufficient</em>
+      — by transforming vacant urban space into transparent, high-tech farms
+      that grow fresh food close to home.
+    </p>
+  </div>
+</section>
+
+<!-- Why we exist -->
+<section class="why" data-screen-label="03 Why we exist">
+  <div class="wrap why-grid">
+    <div>
+      <div class="eyebrow">WHY WE EXIST</div>
+      <h2>Two broken systems.<br/><em>One fix.</em></h2>
+    </div>
+    <div class="col">
+      <p>
+        Today's food system is too long, too fragile, and too disconnected from
+        the communities it serves. Fresh produce often travels for days before
+        it reaches a plate. Nutrient quality declines after harvest. Urban
+        communities remain dependent on supply chains they cannot see.
+      </p>
+      <p>
+        At the same time, downtown Chicago has the highest office vacancy on
+        record. Whole floors of beautiful buildings sit empty, searching for
+        new ways to bring life and purpose back into their walls.
+      </p>
+      <p class="pull">
+        FARMZER0 was built to fix both at once — turn empty floors into farms,
+        and the long supply chain into a 14-floor elevator ride.
+      </p>
+      <p>
+        The result is a new model where fresh food, public health, real estate
+        revitalization, and local economic development all reinforce each other.
+        One building. One block. One city at a time.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Equation: vacant office → farm → city -->
+<section class="equation" data-screen-label="04 Equation">
+  <div class="wrap">
+    <div class="eq-section-head">
+      <div>
+        <div class="eyebrow">REAL ESTATE REIMAGINED</div>
+        <h2>Vacant office.<br/>Urban <em>farm.</em><br/>Healthier city.</h2>
+      </div>
+      <p>
+        Vacant office floors, lower-level commercial spaces, and underutilized
+        downtown buildings can become productive assets again — not just as
+        offices, but as food infrastructure. Landlords, employers, and cities
+        create new value from space that would otherwise sit idle.
+      </p>
+    </div>
+
+    <div class="equation-row">
+      <div class="eq-card">
+        <div>
+          <div class="num">01 — INPUT</div>
+          <h3>Vacant office space</h3>
+          <p>Whole floors of downtown towers, sitting dark since 2020. Beautiful bones, no purpose.</p>
+        </div>
+        <div class="stat">23.4% vacant</div>
+      </div>
+      <div class="eq-arrow">→</div>
+      <div class="eq-card">
+        <div>
+          <div class="num">02 — TRANSFORMATION</div>
+          <h3>FARMZER0 indoor farm</h3>
+          <p>Hemp grow mats, tuned LED light, controlled climate. A working farm that doubles as a public window.</p>
+        </div>
+        <div class="stat">9 days · seed → cut</div>
+      </div>
+      <div class="eq-arrow">→</div>
+      <div class="eq-card">
+        <div>
+          <div class="num">03 — OUTPUT</div>
+          <h3>Healthier city</h3>
+          <p>Fresh food, walking distance from where people live, work, heal, and gather. Buildings full again.</p>
+        </div>
+        <div class="stat">0.4 mi · avg radius</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Food Is Medicine (moved above timeline) -->
+<section class="fim" data-screen-label="05 Food Is Medicine">
+  <div class="wrap fim-grid">
+    <div>
+      <div class="eyebrow" style="color: var(--gold-soft); opacity: 1;">FOOD IS MEDICINE</div>
+      <h2>Food should be part of the<br/><em>healthcare conversation.</em></h2>
+      <p>
+        We believe access to fresh, nutrient-dense food can play a meaningful
+        role in prevention, wellness, and long-term health. Our work is aligned
+        with the growing Food Is Medicine and Food Rx movement — making fresh
+        greens easier to access in the places where people already live, work,
+        heal, and gather.
+      </p>
+      <p>
+        FARMZER0 partners with employers, healthcare systems, payers, food
+        service operators, and civic institutions to bring transparent,
+        hyper-local produce inside the buildings that need it most.
+      </p>
+    </div>
+    <div>
+      <div class="eyebrow" style="color: var(--gold-soft); opacity: 1; margin-bottom: 12px;">WHO WE SERVE</div>
+      <div class="partners-list">
+        <div class="row"><span class="k">CORPORATE</span><span class="v">Workplace dining + farm-to-office wellness</span></div>
+        <div class="row"><span class="k">HEALTH</span><span class="v">Hospitals, payers, Food Rx initiatives</span></div>
+        <div class="row"><span class="k">HOSPITALITY</span><span class="v">Restaurants and catering groups</span></div>
+        <div class="row"><span class="k">RESIDENTIAL</span><span class="v">Downtown high-rises and residences</span></div>
+        <div class="row"><span class="k">RETAIL</span><span class="v">Grab-and-go and counter pickup</span></div>
+        <div class="row"><span class="k">CIVIC</span><span class="v">Community + institutional food programs</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Timeline -->
+<section class="timeline" id="timeline" data-screen-label="05 Timeline">
+  <div class="wrap">
+    <div class="timeline-head">
+      <div>
+        <div class="eyebrow">EARLY WINS · 2024 → 2026</div>
+        <h2>Powering FARMZER0 growth across <em>Chicago.</em></h2>
+      </div>
+      <div class="desc">
+        We don't pitch in slides — we operate. Every milestone below is already
+        running, signed, or actively in market. Here's where we are, in order.
+      </div>
+    </div>
+
+    <div class="tl">
+      <article class="tl-item">
+        <div class="date">JULY 2024</div>
+        <h3>First-of-its-kind concept vertical farm <em>launched.</em></h3>
+        <p>
+          Our pilot farm went operational on the 18th floor of 30 N. LaSalle St.,
+          producing weekly harvests of premium greens and proving the
+          office-floor-as-farm model in a live downtown tower.
+        </p>
+        <div class="chips">
+          <span class="chip solid">FARM01 · 30 N. LASALLE</span>
+          <span class="chip">18TH FLOOR</span>
+          <span class="chip">WEEKLY HARVESTS</span>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <div class="date">NOVEMBER 2024</div>
+        <h3>City of Chicago zoning change permits <em>urban farming.</em></h3>
+        <p>
+          Indoor urban farming was officially permitted across all downtown DX
+          and DC zoning districts — applicable to office and residential
+          buildings in the central area. The most critical barrier for FARMZER0
+          to overcome, and the moment a true path to scalability and viability
+          opened up.
+        </p>
+        <div class="chips">
+          <span class="chip gold">UNLOCKED · DX + DC ZONES</span>
+          <span class="chip">CITY OF CHICAGO</span>
+          <span class="chip">SCALABILITY UNLOCKED</span>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <div class="date">2025</div>
+        <h3>New <em>9,023 sq ft</em> lease secured at 125 S. Wacker.</h3>
+        <p>
+          Signed a long-term lease for a flagship farm at 125 S. Wacker Drive —
+          establishing a scalable urban farm footprint, multi-line production
+          capacity, and the operational base for our next phase of growth.
+        </p>
+        <div class="chips">
+          <span class="chip solid">FARM02 · 125 S. WACKER</span>
+          <span class="chip">9,023 SQ FT</span>
+          <span class="chip">LONG-TERM LEASE</span>
+        </div>
+      </article>
+
+      <article class="tl-item">
+        <div class="date">2025 — ONGOING</div>
+        <h3>Active local clients across <em>four channels.</em></h3>
+        <p>
+          Now serving catering companies, restaurants, downtown high-rise
+          residents, and health institutions with regular weekly deliveries of
+          nutrient-dense produce — including Blue Plate Catering, Chicago
+          Athletic Club, and Deloitte.
+        </p>
+        <div class="chips">
+          <span class="chip">CATERING</span>
+          <span class="chip">RESTAURANTS</span>
+          <span class="chip">RESIDENTIAL TOWERS</span>
+          <span class="chip">HEALTH INSTITUTIONS</span>
+        </div>
+      </article>
+
+      <article class="tl-item now">
+        <div class="date">NOW · 2026</div>
+        <h3>Raising <em>$4M seed</em> to expand capacity, staffing, and distribution.</h3>
+        <p>
+          Currently raising a $4M seed round to expand farm capacity, build out
+          the operations team, and scale our hyper-local distribution
+          infrastructure across the Loop and into adjacent Chicago neighborhoods.
+        </p>
+        <div class="chips">
+          <span class="chip gold">FUNDRAISING · OPEN</span>
+          <span class="chip">$4M SEED</span>
+          <span class="chip">CAPACITY · STAFFING · DISTRIBUTION</span>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" data-screen-label="08 CTA">
+  <div class="wrap-narrow">
+    <div class="eyebrow">JOIN US</div>
+    <h2>Build a city that <em>feeds itself.</em></h2>
+    <p>
+      Investors, landlords, employers, hospitals, chefs — if you're working on
+      any piece of the food, health, or downtown-revitalization puzzle, we want
+      to talk.
+    </p>
+    <div class="cta-buttons">
+      <a class="btn btn-dark" href="mailto:hello@farmzer0.com">Get in touch <span class="arrow">→</span></a>
+      <a class="btn btn-ghost" href="the-farm.html">Tour the farm</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+        <p style="font-size: 14px; opacity: 0.85; max-width: 36ch; margin-top: 16px;">
+          Indoor urban farms inside the buildings where food is actually eaten.
+          Built in Chicago. Designed to scale.
+        </p>
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 24px;">
+          125 S. WACKER DRIVE<br/>CHICAGO IL 60606
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="index.html#shop">Microgreens</a></li>
+          <li><a href="index.html#shop">Specialty blends</a></li>
+          <li><a href="index.html#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#">Workplace dining</a></li>
+          <li><a href="#">Hospitals &amp; Food Rx</a></li>
+          <li><a href="#">Restaurants</a></li>
+          <li><a href="#">Residential</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="the-farm.html">The farm</a></li>
+          <li><a href="about.html">Our story</a></li>
+          <li><a href="about.html#timeline">Milestones</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-mark">FARMZER<span style="color: var(--gold);">0</span></div>
+
+    <div class="footer-bottom">
+      <span>© 2026 FARMZER0 · CHICAGO</span>
+      <span>GROWN HERE · EATEN HERE</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* (status strip is now a continuous marquee — no live counters) */
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
+}, { threshold: 0.12 });
+document.querySelectorAll(".about-hero, .why, .equation, .timeline, .fim, .promise, .cta, .tl-item").forEach(el => {
+  el.classList.add("reveal");
+  io.observe(el);
+});
+</script>
+
+</body>
+</html>

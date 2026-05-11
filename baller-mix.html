@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Baller Mix — FARMZER0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<script src="img-fallback.js"></script>
+<style>
+  /* Breadcrumb */
+  .crumb {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--forest);
+    opacity: 0.78;
+  }
+  .crumb a:hover { opacity: 0.6; }
+  .crumb .sep { margin: 0 12px; opacity: 0.5; }
+
+  /* Product hero */
+  .pdp {
+    padding: 48px 0 96px;
+  }
+  .pdp-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .gallery { display: grid; gap: 12px; }
+  .gallery .main {
+    aspect-ratio: 4/5;
+    position: relative;
+  }
+  .gallery .thumbs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .gallery .thumbs .img-frame {
+    aspect-ratio: 1/1;
+    cursor: pointer;
+    transition: opacity 200ms ease;
+  }
+  .gallery .thumbs .img-frame.active { box-shadow: 0 0 0 2px var(--accent); }
+  .gallery .thumbs .img-frame:hover { opacity: 0.85; }
+
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--forest);
+    color: var(--cream);
+    padding: 6px 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .live-badge .pulse { width: 6px; height: 6px; border-radius: 50%; background: #74D49E; animation: pulse 1.6s infinite; }
+
+  .pdp h1 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(56px, 7vw, 112px);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--forest);
+    margin: 16px 0 8px;
+  }
+  .pdp h1 em { font-style: italic; color: var(--accent); }
+  .pdp .sub {
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--forest);
+    margin: 0 0 24px;
+  }
+  .price-row {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 18px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .price-row .price {
+    font-family: "Instrument Serif", serif;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .price-row .per {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .opt-block { margin-top: 24px; }
+  .opt-block .label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--forest);
+    opacity: 0.78;
+    margin-bottom: 10px;
+  }
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--forest);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .seg button {
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--forest);
+    border-right: 1px solid var(--forest);
+    transition: background 200ms ease, color 200ms ease;
+  }
+  .seg button:last-child { border-right: none; }
+  .seg button.on { background: var(--forest); color: var(--cream); }
+
+  .qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--forest);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .qty button { width: 44px; height: 44px; font-size: 18px; }
+  .qty .n { width: 44px; text-align: center; font-family: "JetBrains Mono", monospace; }
+
+  .add-row {
+    margin-top: 32px;
+    display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+  }
+  .add-row .btn-dark { padding: 16px 28px; font-size: 15px; }
+
+  .delivery {
+    margin-top: 32px;
+    padding: 18px 20px;
+    background: var(--cream);
+    border: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .delivery .line {
+    display: flex; align-items: baseline; gap: 10px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--forest);
+    text-transform: uppercase;
+  }
+  .delivery .line b { color: var(--ink); font-weight: 500; }
+
+  /* Description */
+  .desc-block {
+    margin-top: 40px;
+    border-top: 1px solid var(--line);
+    padding-top: 32px;
+  }
+  .desc-block p {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--charcoal);
+    margin: 0 0 16px;
+    max-width: 50ch;
+  }
+
+  /* Why this */
+  .why {
+    background: var(--forest);
+    color: var(--cream);
+    padding: 96px 0;
+  }
+  .why h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 48px;
+    max-width: 22ch;
+  }
+  .why h2 em { font-style: italic; color: var(--gold-soft); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid rgba(242,237,227,0.22);
+  }
+  .stat {
+    padding: 32px 24px 32px 0;
+    border-right: 1px solid rgba(242,237,227,0.22);
+    border-bottom: 1px solid rgba(242,237,227,0.22);
+  }
+  .stat:last-child { border-right: none; }
+  .stat .v {
+    font-family: "Instrument Serif", serif;
+    font-size: clamp(56px, 7vw, 96px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--gold-soft);
+  }
+  .stat .v em { font-style: italic; }
+  .stat .l {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 12px;
+    max-width: 22ch;
+    opacity: 0.85;
+  }
+  @media (max-width: 880px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Composition */
+  .compo {
+    background: var(--paper);
+    padding: 96px 0;
+  }
+  .compo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: start;
+  }
+  .compo h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    margin: 12px 0 32px;
+    letter-spacing: -0.01em;
+  }
+  .compo h2 em { font-style: italic; color: var(--accent); }
+  .compo p { font-size: 16px; line-height: 1.55; color: var(--charcoal); max-width: 48ch; }
+  .ratios { margin-top: 24px; }
+  .ratio {
+    display: grid;
+    grid-template-columns: 28% 1fr 64px;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .ratio b {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400; font-style: italic;
+    font-size: 22px;
+  }
+  .ratio .track {
+    height: 6px; background: var(--cream-deep); position: relative;
+  }
+  .ratio .track i {
+    position: absolute; left: 0; top: 0; bottom: 0; background: var(--forest);
+    transition: width 2.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ratio .pct {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--forest);
+  }
+  .nutri {
+    background: var(--cream);
+    padding: 24px;
+    border: 1px solid var(--line);
+  }
+  .nutri h4 {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
+    margin: 0 0 16px;
+  }
+  .nutri table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .nutri td {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .nutri td:last-child {
+    text-align: right;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+  }
+  .nutri tr:last-child td { border-bottom: none; }
+  .nutri .vs {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-left: 6px;
+  }
+  @media (max-width: 980px) {
+    .compo-grid { grid-template-columns: 1fr; gap: 32px; }
+    .pdp-grid { grid-template-columns: 1fr; }
+  }
+
+  /* How to use */
+  .howto {
+    padding: 96px 0;
+    border-top: 1px solid var(--line);
+  }
+  .howto h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 48px;
+  }
+  .howto h2 em { font-style: italic; color: var(--accent); }
+  .uses {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .use { display: flex; flex-direction: column; }
+  .use .img-frame { aspect-ratio: 4/5; margin-bottom: 16px; }
+  .use h3 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: 26px;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .use p { font-size: 14px; color: var(--forest); margin: 0; }
+  @media (max-width: 880px) { .uses { grid-template-columns: 1fr; } }
+
+  /* Reviews */
+  .reviews { background: var(--cream); padding: 96px 0; }
+  .review-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; }
+  .review-grid h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 12px 0 24px;
+  }
+  .review-grid h2 em { font-style: italic; color: var(--accent); }
+  .stars { font-family: "Instrument Serif", serif; color: var(--accent); font-size: 22px; }
+  .review { padding: 24px 0; border-bottom: 1px solid var(--line); }
+  .review:last-child { border-bottom: none; }
+  .review q {
+    display: block;
+    font-family: "Instrument Serif", serif;
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--forest);
+    quotes: "\201C" "\201D";
+  }
+  .review .meta {
+    margin-top: 12px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  @media (max-width: 980px) { .review-grid { grid-template-columns: 1fr; gap: 24px; } }
+
+  /* Related */
+  .related {
+    padding: 96px 0;
+    border-top: 1px solid var(--line);
+  }
+  .related h2 {
+    font-family: "Instrument Serif", serif;
+    font-weight: 400;
+    font-size: clamp(36px, 4.4vw, 64px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    margin: 0 0 32px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .related .product .img-frame { aspect-ratio: 4/5; }
+  .related .product-head h3 { font-size: 24px; }
+  @media (max-width: 980px) { .related-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .related-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+    </div>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="index.html" class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></a>
+    <nav class="nav">
+      <a href="index.html#shop" class="active">Shop</a>
+      <a href="the-farm.html">The Farm</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · <span id="bag-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap crumb">
+  <a href="index.html">Shop</a>
+  <span class="sep">/</span>
+  <a href="#">Specialty blends</a>
+  <span class="sep">/</span>
+  <span style="color: var(--forest); opacity: 1;">Baller Mix</span>
+</div>
+
+<!-- Product hero -->
+<section class="pdp" data-screen-label="01 Product hero">
+  <div class="wrap pdp-grid">
+
+    <div class="gallery">
+      <div class="img-frame main">
+        <img id="main-img" src="placeholder://" alt="Baller Mix microgreens" />
+      </div>
+      <div class="thumbs" id="thumbs">
+        <div class="img-frame active"><img src="placeholder://" alt="Baller Mix · view 1" /></div>
+        <div class="img-frame"><img src="placeholder://" alt="Baller Mix · view 2" /></div>
+        <div class="img-frame"><img src="placeholder://" alt="Baller Mix · view 3" /></div>
+        <div class="img-frame"><img src="placeholder://" alt="Baller Mix · view 4" /></div>
+      </div>
+    </div>
+
+    <div>
+      <span class="live-badge"><span class="pulse"></span>HARVESTING TONIGHT · READY 06:00 AM</span>
+      <h1>Baller<br/><em>Mix.</em></h1>
+      <div class="sub">A four-microgreen blend, built for everyday performance.</div>
+
+      <div class="price-row">
+        <span class="price">$8</span>
+        <span class="per">/ 2 oz · serves four</span>
+        <span class="per" style="margin-left: auto; color: var(--accent);">★★★★★ 4.9 (217)</span>
+      </div>
+
+      <div class="opt-block">
+        <div class="label">Size</div>
+        <div class="seg" id="size">
+          <button class="on" data-size="2 oz" data-price="8">2 oz · $8</button>
+          <button data-size="4 oz" data-price="14">4 oz · $14</button>
+          <button data-size="8 oz" data-price="26">8 oz · $26</button>
+        </div>
+      </div>
+
+      <div class="opt-block">
+        <div class="label">Frequency</div>
+        <div class="seg" id="freq">
+          <button class="on">One-time</button>
+          <button>Weekly · save 15%</button>
+          <button>Bi-weekly · save 10%</button>
+        </div>
+      </div>
+
+      <div class="opt-block">
+        <div class="label">Pickup or runner</div>
+        <div class="seg" id="fulfill">
+          <button class="on">Loop counter</button>
+          <button>Farm Runner · +$4</button>
+          <button>Bike courier · +$8</button>
+        </div>
+      </div>
+
+      <div class="opt-block">
+        <div class="label">Quantity</div>
+        <div class="qty">
+          <button id="dec">−</button>
+          <span class="n" id="qty">1</span>
+          <button id="inc">+</button>
+        </div>
+      </div>
+
+      <div class="add-row">
+        <button class="btn btn-dark" id="add">Add to bag · <span id="total">$8</span> <span class="arrow">→</span></button>
+      </div>
+
+      <div class="delivery">
+        <div class="line"><b>HARVEST</b> Tomorrow, 6:00 AM</div>
+        <div class="line"><b>PICKUP</b> Tomorrow, 7 AM – 7 PM</div>
+        <div class="line"><b>SHELF</b> 14 days, refrigerated</div>
+        <div class="line"><b>PACKAGING</b> 100% recyclable PET</div>
+      </div>
+
+      <div class="desc-block">
+        <p>
+          Our flagship blend — pea shoots, sunflower, broccoli, and red cabbage —
+          balanced for flavor first, nutrient density second. Mild, sweet, and
+          peppery. Throws onto eggs, salads, grain bowls, avocado toast,
+          basically anything that's about to leave the kitchen.
+        </p>
+        <p>
+          Cut to order. Walked across the Loop, never trucked. In your fridge
+          within hours of harvest, with all the chlorophyll, glucosinolates and
+          carotenoids still doing their job.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- Composition -->
+<section class="compo" data-screen-label="03 Composition">
+  <div class="wrap compo-grid">
+    <div>
+      <div class="eyebrow">WHAT'S IN THE TRAY</div>
+      <h2>Four greens.<br/>One <em>blend.</em></h2>
+      <p>Each microgreen pulls a different shift. Pea shoots bring the sweet,
+        sunflower the crunch, broccoli the medicine, red cabbage the color.</p>
+      <div class="ratios" id="ratios">
+        <div class="ratio"><b>Pea shoots</b><div class="track"><i style="width:0%" data-w="40"></i></div><span class="pct">40%</span></div>
+        <div class="ratio"><b>Sunflower</b><div class="track"><i style="width:0%" data-w="30"></i></div><span class="pct">30%</span></div>
+        <div class="ratio"><b>Broccoli</b><div class="track"><i style="width:0%" data-w="20"></i></div><span class="pct">20%</span></div>
+        <div class="ratio"><b>Red cabbage</b><div class="track"><i style="width:0%" data-w="10"></i></div><span class="pct">10%</span></div>
+      </div>
+    </div>
+
+    <div class="nutri">
+      <h4>Per 1 oz serving</h4>
+      <table>
+        <tbody>
+          <tr><td>Calories</td><td>9 kcal</td></tr>
+          <tr><td>Vitamin K</td><td>180 µg <span class="vs">150% DV</span></td></tr>
+          <tr><td>Vitamin C</td><td>22 mg <span class="vs">24% DV</span></td></tr>
+          <tr><td>Folate</td><td>74 µg</td></tr>
+          <tr><td>Sulforaphane</td><td>14 mg <span class="vs">↑ from broccoli</span></td></tr>
+          <tr><td>Polyphenols</td><td>185 mg</td></tr>
+          <tr><td>Lutein + Zeaxanthin</td><td>1.2 mg</td></tr>
+          <tr><td>Fiber</td><td>1.4 g</td></tr>
+        </tbody>
+      </table>
+      <div class="mono" style="margin-top: 14px; font-size: 10px; letter-spacing: 0.08em; opacity: 0.6;">
+        Independently lab-tested · Eurofins · 2026 Q1 panel
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- How to use -->
+<section class="howto" data-screen-label="04 How to use">
+  <div class="wrap">
+    <div class="eyebrow">PLATING IDEAS</div>
+    <h2>Three ways<br/>to use the <em>tray.</em></h2>
+    <div class="uses">
+      <div class="use">
+        <div class="img-frame">
+          <img src="placeholder://" alt="Eggs and microgreens" />
+          <span class="img-tag">01 · BREAKFAST</span>
+        </div>
+        <h3>On eggs.</h3>
+        <p>Soft scramble, sea salt, lemon zest, and a fistful right at the end. The pea shoots wilt just a little; the sunflower stays crunchy.</p>
+      </div>
+      <div class="use">
+        <div class="img-frame">
+          <img src="placeholder://" alt="Grain bowl with greens" />
+          <span class="img-tag">02 · LUNCH</span>
+        </div>
+        <h3>On a bowl.</h3>
+        <p>Farro, roasted squash, tahini-lemon, and a generous mound on top. The broccoli sulforaphane wakes up when you bite into it.</p>
+      </div>
+      <div class="use">
+        <div class="img-frame">
+          <img src="placeholder://" alt="Toast with greens" />
+          <span class="img-tag">03 · ANYTIME</span>
+        </div>
+        <h3>On toast.</h3>
+        <p>Sourdough, smashed avocado, chili crisp, baller mix. The fastest possible way to look like you tried.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews -->
+<section class="reviews" data-screen-label="05 Reviews">
+  <div class="wrap review-grid">
+    <div>
+      <div class="eyebrow">REVIEWS · 217 VERIFIED</div>
+      <h2>What the<br/>regulars <em>say.</em></h2>
+      <div class="stars">★★★★★</div>
+      <div class="mono" style="font-size: 12px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 8px;">4.9 / 5 · 217 REVIEWS</div>
+    </div>
+    <div>
+      <article class="review">
+        <q>I genuinely cannot eat grocery store greens anymore. There's a difference and your taste buds figure it out within a week.</q>
+        <div class="meta">— Maya R. · West Loop · Subscribed 7 months</div>
+      </article>
+      <article class="review">
+        <q>The Loop pickup is unreal — I grab it on my way back to the apartment and it's still cool from the harvest fridge.</q>
+        <div class="meta">— Daniel K. · Loop · Subscribed 4 months</div>
+      </article>
+      <article class="review">
+        <q>My five-year-old asked if we could go visit "the food building." That's a win.</q>
+        <div class="meta">— Priya S. · Lincoln Park · Subscribed 11 months</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Related -->
+<section class="related">
+  <div class="wrap">
+    <div class="eyebrow">PAIRS WITH</div>
+    <h2>You'll probably want<br/>these <em>too.</em></h2>
+    <div class="related-grid">
+      <a class="product" href="#">
+        <div class="img-frame"><img src="placeholder://" alt="Broccoli microgreens" /></div>
+        <div class="product-head"><h3>Broccoli</h3><span class="price">$9</span></div>
+        <div class="product-meta"><span>2 OZ</span><span>+ ADD</span></div>
+      </a>
+      <a class="product" href="#">
+        <div class="img-frame"><img src="placeholder://" alt="Wasabi greens" /></div>
+        <div class="product-head"><h3>Wasabi</h3><span class="price">$11</span></div>
+        <div class="product-meta"><span>1 OZ</span><span>+ ADD</span></div>
+      </a>
+      <a class="product" href="#">
+        <div class="img-frame"><img src="placeholder://" alt="Longevity Mix" /></div>
+        <div class="product-head"><h3>Longevity Mix</h3><span class="price">$9</span></div>
+        <div class="product-meta"><span>2 OZ</span><span>+ ADD</span></div>
+      </a>
+      <a class="product" href="#">
+        <div class="img-frame"><img src="placeholder://" alt="Sunflower" /></div>
+        <div class="product-head"><h3>Sunflower</h3><span class="price">$7</span></div>
+        <div class="product-meta"><span>2 OZ</span><span>+ ADD</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Why this (moved to bottom, below Pairs with) -->
+<section class="why" data-screen-label="06 Why this">
+  <div class="wrap">
+    <div class="eyebrow">WHY BALLER MIX</div>
+    <h2>The shortest distance<br/>between a seed and<br/><em>a meal.</em></h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="v"><em>4–40×</em></div>
+        <div class="l">Nutrient density vs. mature plants <span class="mono" style="opacity: 0.5;">/ Johns Hopkins</span></div>
+      </div>
+      <div class="stat">
+        <div class="v"><em>0.4</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 18px; opacity: 0.6;"> mi</span></div>
+        <div class="l">Avg distance, farm to your kitchen</div>
+      </div>
+      <div class="stat">
+        <div class="v"><em>9</em><span style="font-family: 'JetBrains Mono', monospace; font-size: 18px; opacity: 0.6;"> days</span></div>
+        <div class="l">Seed to harvest, indoors</div>
+      </div>
+      <div class="stat">
+        <div class="v"><em>0</em></div>
+        <div class="l">Pesticides, herbicides, or trucks</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+        <p style="font-size: 14px; opacity: 0.85; max-width: 36ch; margin-top: 16px;">
+          Indoor urban farms inside the buildings where food is actually eaten.
+          Built in Chicago. Designed to scale.
+        </p>
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 24px;">
+          125 S. WACKER DRIVE<br/>CHICAGO IL 60606
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="index.html#shop">Microgreens</a></li>
+          <li><a href="index.html#shop">Specialty blends</a></li>
+          <li><a href="index.html#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Programs</h4>
+        <ul>
+          <li><a href="#">Workplace dining</a></li>
+          <li><a href="#">Hospitals &amp; Food Rx</a></li>
+          <li><a href="#">Restaurants</a></li>
+          <li><a href="#">Residential</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="the-farm.html">The farm</a></li>
+          <li><a href="#">Our model</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-mark">FARMZER<span style="color: var(--gold);">0</span></div>
+    <div class="footer-bottom">
+      <span>© 2026 FARMZER0 · CHICAGO</span>
+      <span>GROWN HERE · EATEN HERE</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* segmented controls */
+function wireSeg(id, cb) {
+  const seg = document.getElementById(id);
+  if (!seg) return;
+  seg.addEventListener("click", e => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    seg.querySelectorAll("button").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    if (cb) cb(btn);
+  });
+}
+let unitPrice = 8;
+let qty = 1;
+function refreshTotal() {
+  document.getElementById("total").textContent = "$" + (unitPrice * qty);
+}
+wireSeg("size", btn => { unitPrice = parseInt(btn.dataset.price, 10); refreshTotal(); });
+wireSeg("freq");
+wireSeg("fulfill");
+document.getElementById("inc").onclick = () => { qty++; document.getElementById("qty").textContent = qty; refreshTotal(); };
+document.getElementById("dec").onclick = () => { qty = Math.max(1, qty - 1); document.getElementById("qty").textContent = qty; refreshTotal(); };
+document.getElementById("add").onclick = () => {
+  const c = document.getElementById("bag-count");
+  c.textContent = parseInt(c.textContent, 10) + qty;
+  document.getElementById("add").innerHTML = '✓ Added · in your bag <span class="arrow">→</span>';
+  setTimeout(() => { document.getElementById("add").innerHTML = 'Add to bag · <span id="total">$' + (unitPrice*qty) + '</span> <span class="arrow">→</span>'; }, 1800);
+};
+
+/* gallery thumbs */
+document.querySelectorAll("#thumbs .img-frame").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll("#thumbs .img-frame").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("main-img").src = t.querySelector("img").src.replace("w=600", "w=1400");
+  });
+});
+
+/* (status strip is now a continuous marquee — no live counters) */
+
+/* animate ratio bars */
+const ratiosObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll(".track i").forEach(i => {
+        i.style.width = i.dataset.w + "%";
+      });
+      ratiosObserver.disconnect();
+    }
+  });
+}, { threshold: 0.3 });
+ratiosObserver.observe(document.getElementById("ratios"));
+</script>
+
+</body>
+</html>
