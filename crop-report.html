@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Crop Report — FARMZER0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<link rel="stylesheet" href="styles.css?v=3" />
+<script src="img-fallback.js"></script>
+<style>
+  /* ——— Page hero ——— */
+  .cr-hero { padding: 96px 0 48px; }
+  .cr-hero .eyebrow {
+    font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--forest); opacity: 0.65; margin-bottom: 24px;
+  }
+  .cr-hero .head-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 64px; align-items: end; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .cr-hero h1 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(56px, 8vw, 136px); line-height: 0.94; letter-spacing: -0.025em;
+    margin: 0; color: var(--forest); max-width: 14ch;
+  }
+  .cr-hero h1 em { font-style: italic; color: var(--accent); }
+  .cr-hero .lede {
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: clamp(20px, 1.7vw, 26px); line-height: 1.35; color: var(--forest);
+    max-width: 42ch;
+  }
+  .cr-hero .meta {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; margin-top: 32px;
+  }
+  .cr-hero .meta .v { font-family: "Instrument Serif", serif; font-size: 40px; line-height: 1; color: var(--forest); letter-spacing: -0.02em; }
+  .cr-hero .meta .v em { font-style: italic; color: var(--accent); }
+  .cr-hero .meta .l { font-family: "JetBrains Mono", monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.7; margin-top: 8px; }
+  @media (max-width: 880px) { .cr-hero .head-grid { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* ——— Newspaper-style report banner ——— */
+  .cr-banner {
+    background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 24px 0; margin-top: 32px;
+  }
+  .cr-banner-inner { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px; }
+  .cr-banner .vol { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest); opacity: 0.7; }
+  .cr-banner .vol b { color: var(--accent); font-weight: 500; }
+  .cr-banner .masthead {
+    font-family: "Instrument Serif", serif; font-style: italic; font-size: 28px; color: var(--forest);
+  }
+  .cr-banner .masthead em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+  /* ——— Crop calendar ——— */
+  .cr-section { padding: 80px 0; border-bottom: 1px solid var(--line); }
+  .cr-section .head { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: end; margin-bottom: 40px; }
+  .cr-section .head h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.012em;
+    margin: 0; max-width: 16ch;
+  }
+  .cr-section .head h2 em { font-style: italic; color: var(--accent); }
+  .cr-section .head .desc {
+    font-size: 16px; max-width: 44ch; color: var(--forest); margin: 0;
+  }
+  @media (max-width: 880px) { .cr-section .head { grid-template-columns: 1fr; gap: 16px; } }
+
+  /* Farm toggle */
+  .farm-toggle {
+    display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .farm-toggle button {
+    padding: 10px 22px; background: transparent; border: none; cursor: pointer;
+    font-family: "Geist", sans-serif; font-size: 13px; font-weight: 500; color: var(--forest);
+    border-right: 1px solid var(--line);
+    transition: all 180ms ease;
+  }
+  .farm-toggle button:last-child { border-right: none; }
+  .farm-toggle button.on { background: var(--forest); color: var(--cream); }
+
+  .crop-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  @media (max-width: 880px) { .crop-grid { grid-template-columns: 1fr; } }
+
+  .crop-card {
+    background: var(--paper); border: 1px solid var(--line); padding: 24px;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .crop-card .stage {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  }
+  .crop-card.future .stage { color: var(--gold-soft); }
+  .crop-card h3 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: 28px; line-height: 1; margin: 0; letter-spacing: -0.01em; color: var(--forest);
+  }
+  .crop-card .meta {
+    display: flex; justify-content: space-between;
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--forest); opacity: 0.7;
+  }
+  .crop-card .meta b { color: var(--forest); font-weight: 500; opacity: 1; }
+  .crop-card .progress {
+    height: 4px; background: var(--cream-deep); position: relative; overflow: hidden;
+  }
+  .crop-card .progress i {
+    position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent);
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .crop-card.future .progress i { background: var(--gold-soft); width: 0%; }
+  .crop-card .desc { font-size: 13px; line-height: 1.5; color: var(--charcoal); margin: 0; }
+
+  /* ——— Request form ——— */
+  .cr-request {
+    background: var(--forest); color: var(--cream);
+    padding: 96px 0;
+  }
+  .cr-request .grid {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: start;
+  }
+  .cr-request .eyebrow { color: var(--gold-soft); opacity: 1; }
+  .cr-request h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(40px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.012em;
+    margin: 12px 0 24px;
+  }
+  .cr-request h2 em { font-style: italic; color: var(--gold-soft); }
+  .cr-request p { opacity: 0.85; font-size: 17px; line-height: 1.55; max-width: 48ch; }
+  .cr-request p + p { margin-top: 16px; }
+  .cr-request .examples {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 32px;
+  }
+  .cr-request .examples button {
+    text-align: left; padding: 12px 16px;
+    background: transparent; border: 1px solid rgba(242,237,227,0.22);
+    color: var(--cream); cursor: pointer; transition: all 180ms ease;
+    font-family: "Instrument Serif", serif; font-style: italic; font-size: 16px;
+  }
+  .cr-request .examples button:hover { background: rgba(0,244,100,0.12); border-color: var(--accent); color: var(--accent); }
+
+  .cr-form {
+    background: var(--paper); color: var(--forest);
+    padding: 32px; border: 1px solid rgba(242,237,227,0.18);
+  }
+  .cr-form .row { margin-bottom: 16px; }
+  .cr-form label {
+    display: block; font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--forest);
+    opacity: 0.7; margin-bottom: 6px;
+  }
+  .cr-form input, .cr-form select, .cr-form textarea {
+    width: 100%; box-sizing: border-box;
+    padding: 12px 14px; border: 1px solid var(--line);
+    font: inherit; font-family: "Geist", sans-serif; font-size: 14px;
+    background: var(--cream); color: var(--forest);
+    border-radius: 0;
+  }
+  .cr-form textarea { min-height: 100px; resize: vertical; font-family: "Instrument Serif", serif; font-style: italic; font-size: 16px; }
+  .cr-form input:focus, .cr-form select:focus, .cr-form textarea:focus {
+    outline: none; border-color: var(--forest);
+  }
+  .cr-form .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cr-form button[type="submit"] {
+    margin-top: 16px; width: 100%; padding: 14px 22px;
+    background: var(--forest); color: var(--cream); border: none; cursor: pointer;
+    font-family: "Geist", sans-serif; font-size: 14px; font-weight: 500;
+  }
+  .cr-form button[type="submit"]:hover { background: var(--forest-deep); }
+  .cr-form .success {
+    background: var(--accent); color: var(--forest);
+    padding: 18px; text-align: center; font-family: "Instrument Serif", serif;
+    font-style: italic; font-size: 18px;
+  }
+  @media (max-width: 880px) { .cr-request .grid { grid-template-columns: 1fr; gap: 32px; } .cr-form .row-2 { grid-template-columns: 1fr; } }
+
+  /* ——— Subscribe (newsletter) ——— */
+  .cr-subscribe {
+    padding: 120px 0;
+    text-align: center;
+  }
+  .cr-subscribe h2 {
+    font-family: "Instrument Serif", serif; font-weight: 400;
+    font-size: clamp(48px, 6vw, 104px); line-height: 1;
+    letter-spacing: -0.02em; margin: 0 0 16px; color: var(--forest);
+  }
+  .cr-subscribe h2 em { font-style: italic; color: var(--accent); }
+  .cr-subscribe p { color: var(--forest); margin: 0 auto 32px; max-width: 50ch; font-size: 16px; }
+  .cr-subscribe .form {
+    display: inline-flex; border: 1px solid var(--forest); border-radius: 999px;
+    overflow: hidden; max-width: 100%;
+  }
+  .cr-subscribe .form input { border: none; padding: 14px 22px; font: inherit; background: transparent; min-width: 280px; color: var(--forest); }
+  .cr-subscribe .form input:focus { outline: none; }
+  .cr-subscribe .form button { background: var(--forest); color: var(--cream); padding: 0 22px; font-weight: 500; border: none; cursor: pointer; }
+  .cr-subscribe .what-you-get {
+    margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+    border-top: 1px solid var(--line); padding-top: 32px;
+  }
+  .cr-subscribe .what-you-get .item .icon {
+    font-family: "Instrument Serif", serif; font-style: italic;
+    font-size: 36px; color: var(--accent); margin-bottom: 8px;
+  }
+  .cr-subscribe .what-you-get .item .label {
+    font-family: "JetBrains Mono", monospace; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--forest); opacity: 0.75;
+  }
+  .cr-subscribe .what-you-get .item p {
+    font-size: 13px; margin: 6px 0 0; opacity: 0.85;
+  }
+  @media (max-width: 880px) { .cr-subscribe .what-you-get { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- Status strip marquee -->
+<div class="status-strip" data-screen-label="Status strip">
+  <div class="status-strip-inner">
+    <div class="status-strip-track">
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+      <span><b>Welcome to the Future of Urban Agriculture.</b></span>
+    </div>
+  </div>
+</div>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="wrap topbar-inner">
+    <a href="index.html" class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></a>
+    <nav class="nav">
+      <a href="index.html#shop">Shop</a>
+      <a href="the-farm.html">Explore our farms</a>
+      <a href="nutrition.html">Nutrition</a>
+      <a href="crop-report.html" class="active">Crop Report</a>
+      <a href="faq.html">FAQ</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="topbar-right">
+      <span class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7;">CHI · LOOP</span>
+      <a class="bag" href="#bag">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 7h14l-1.5 13a2 2 0 0 1-2 1.8h-7a2 2 0 0 1-2-1.8L5 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        Bag · <span id="bag-count">0</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="cr-hero" data-screen-label="01 Hero">
+  <div class="wrap">
+    <div class="eyebrow">WEEKLY · FARMZER0 GROW REPORT</div>
+    <div class="head-grid">
+      <h1>The Crop <em>Report.</em></h1>
+      <p class="lede">
+        What's on the grow walls this week. What's coming next. Direct from the
+        farm, every Sunday morning.
+      </p>
+    </div>
+    <div class="meta">
+      <div><div class="v"><em>14</em></div><div class="l">Crops live · Farm 01</div></div>
+      <div><div class="v"><em>18</em></div><div class="l">Planned · Farm 02 · Fall '26</div></div>
+      <div><div class="v"><em>1,842</em></div><div class="l">Subscribers</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Banner -->
+<div class="cr-banner">
+  <div class="wrap cr-banner-inner">
+    <span class="vol">VOL. III · ISSUE 47 · WEEK OF <b id="weekof">NOV 23, 2026</b></span>
+    <span class="masthead">Filed from <em>FARM 01</em> · 30 N. LaSalle</span>
+    <span class="vol">NEXT ISSUE · <b>SUN 8 AM</b></span>
+  </div>
+</div>
+
+<!-- Currently growing -->
+<section class="cr-section" data-screen-label="02 Currently growing">
+  <div class="wrap">
+    <div class="head">
+      <h2>Currently <em>growing.</em></h2>
+      <p class="desc">
+        Live tray count, harvest stage, and pickup readiness across both farms.
+        Yellow means it's not ready yet, green means it's already on the counter.
+      </p>
+    </div>
+
+    <div class="farm-toggle" id="current-toggle">
+      <button class="on" data-farm="all">All farms</button>
+      <button data-farm="farm01">Farm 01 · LaSalle</button>
+      <button data-farm="farm02">Farm 02 · Wacker</button>
+    </div>
+
+    <div class="crop-grid" id="current-grid"></div>
+  </div>
+</section>
+
+<!-- Coming up -->
+<section class="cr-section" data-screen-label="03 Coming up">
+  <div class="wrap">
+    <div class="head">
+      <h2>Coming up <em>next.</em></h2>
+      <p class="desc">
+        Seeded this week, on the walls in 9 days. Pre-order any of these by Sunday
+        to lock in the first harvest.
+      </p>
+    </div>
+    <div class="crop-grid" id="future-grid"></div>
+  </div>
+</section>
+
+<!-- Request form -->
+<section class="cr-request" data-screen-label="04 Crop request">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="eyebrow">FROM YOU · TO THE GROW TEAM</div>
+        <h2>Submit a crop <em>request.</em></h2>
+        <p>
+          Something you wish you could find but can't? Tell our grow team.
+          We read every request and add the best ones to the seed lab.
+        </p>
+        <p>
+          Requests don't have to be crops — we also build seasonal Farm Boxes,
+          custom holiday gifts, and chef-collaboration drops on request.
+        </p>
+        <div class="examples">
+          <button data-fill="A specific microgreen we're not currently growing">A new microgreen variety</button>
+          <button data-fill="A holiday-themed Farm Box as a corporate gift">Holiday Farm Box gift</button>
+          <button data-fill="A chef collaboration or restaurant menu support">Chef / restaurant collab</button>
+          <button data-fill="An edible flower variety for plating">An edible flower variety</button>
+        </div>
+      </div>
+
+      <form class="cr-form" id="request-form">
+        <div class="row">
+          <label for="rf-name">Your name</label>
+          <input id="rf-name" required />
+        </div>
+        <div class="row row-2">
+          <div>
+            <label for="rf-email">Email</label>
+            <input id="rf-email" type="email" required />
+          </div>
+          <div>
+            <label for="rf-type">Request type</label>
+            <select id="rf-type">
+              <option>New crop variety</option>
+              <option>Farm Box / gift</option>
+              <option>Chef collaboration</option>
+              <option>Wholesale inquiry</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <label for="rf-msg">What would you like us to grow?</label>
+          <textarea id="rf-msg" placeholder="Describe what you'd like to see on the walls — a variety, a holiday gift idea, a chef partnership, anything…" required></textarea>
+        </div>
+        <button type="submit">Send to the grow team →</button>
+        <div class="success" id="rf-success" style="display:none;">✓ Sent. The grow team will read it before Monday.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Subscribe -->
+<section class="cr-subscribe" data-screen-label="05 Subscribe">
+  <div class="wrap-narrow">
+    <div class="eyebrow">JOIN THE LIST</div>
+    <h2>Get the Crop Report<br/>in your <em>inbox.</em></h2>
+    <p>
+      Every Sunday morning. Five-minute read, no marketing fluff —
+      what's on the walls, what's coming off, and a recipe from a Loop chef that uses it.
+    </p>
+    <form class="form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='✓ Subscribed';">
+      <input type="email" placeholder="you@yourbuilding.com" required />
+      <button type="submit">Subscribe</button>
+    </form>
+
+    <div class="what-you-get">
+      <div class="item">
+        <div class="icon">01.</div>
+        <div class="label">What's growing</div>
+        <p>Live crop list with tray counts and harvest dates.</p>
+      </div>
+      <div class="item">
+        <div class="icon">02.</div>
+        <div class="label">Pre-order window</div>
+        <p>First crack at limited-run specialty varieties.</p>
+      </div>
+      <div class="item">
+        <div class="icon">03.</div>
+        <div class="label">Chef recipe</div>
+        <p>One short recipe a week, from a Chicago kitchen.</p>
+      </div>
+      <div class="item">
+        <div class="icon">04.</div>
+        <div class="label">Farm field notes</div>
+        <p>What worked, what didn't, what we're trying next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand"><img class="brand-logo" src="farmzero-logo.svg" alt="FARMZER0" /></div>
+        <p style="font-size: 14px; opacity: 0.85; max-width: 36ch; margin-top: 16px;">
+          Indoor urban farms inside the buildings where food is actually eaten.
+          Built in Chicago. Designed to scale.
+        </p>
+        <div class="mono" style="font-size: 11px; letter-spacing: 0.08em; opacity: 0.7; margin-top: 24px;">
+          30 N. LASALLE ST<br/>CHICAGO IL 60602
+        </div>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="index.html#shop">Microgreens</a></li>
+          <li><a href="index.html#shop">Specialty blends</a></li>
+          <li><a href="index.html#shop">Herbs &amp; greens</a></li>
+          <li><a href="#">Subscriptions</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>The farms</h4>
+        <ul>
+          <li><a href="the-farm.html">Explore our farms</a></li>
+          <li><a href="nutrition.html">Nutrition index</a></li>
+          <li><a href="crop-report.html">Crop Report</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>About</h4>
+        <ul>
+          <li><a href="about.html">Our story</a></li>
+          <li><a href="about.html#timeline">Milestones</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-mark">FARMZER<span style="color: var(--gold);">0</span></div>
+    <div class="footer-bottom">
+      <span>© 2026 FARMZER0 · CHICAGO</span>
+      <span>GROWN HERE · EATEN HERE</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ——— Data ——— */
+const CURRENT = [
+  { name: "Pea Shoots",       farm: "farm01", days: 7, total: 9, harvest: "Tue 6 AM", trays: 12, desc: "Sweet, tendril-y, juicy. Day 7 of 9, harvesting Tuesday." },
+  { name: "Sunflower Shoots", farm: "farm01", days: 8, total: 9, harvest: "Wed 6 AM", trays: 10, desc: "Nutty, crunchy. Cotyledons fully open — ready tomorrow." },
+  { name: "Broccoli Greens",  farm: "farm01", days: 5, total: 9, harvest: "Sat 6 AM", trays: 14, desc: "Peak sulforaphane stage. Mid-week harvest." },
+  { name: "Baller Mix",       farm: "farm01", days: 9, total: 9, harvest: "Today",    trays: 8,  desc: "Harvested this morning — at the counter now." },
+  { name: "Wasabi Greens",    farm: "farm01", days: 6, total: 9, harvest: "Fri 6 AM", trays: 4,  desc: "Limited run. Hot, peppery — chef favorite." },
+  { name: "Cilantro",         farm: "farm01", days: 12, total: 18, harvest: "Sun 7 AM", trays: 6, desc: "Long-cycle herb. Roughly two weeks total." },
+];
+
+const FUTURE = [
+  { name: "Pak Choi",        farm: "farm02", weeks: 4, desc: "Mild, mustardy. First seed-trial on Wacker." },
+  { name: "Thai Basil",      farm: "farm02", weeks: 6, desc: "Anise notes. Replacing imported." },
+  { name: "Baby Kale",       farm: "farm02", weeks: 5, desc: "Tender, sweet — early-cut leaves." },
+  { name: "Little Gem",      farm: "farm02", weeks: 8, desc: "Crisp salad leaf. Yield trial in progress." },
+  { name: "Borage Flowers",  farm: "farm02", weeks: 7, desc: "Edible flowers · cucumber notes." },
+  { name: "Calendula",       farm: "farm02", weeks: 9, desc: "Yellow-orange petals · tea + salad." },
+];
+
+/* ——— Set week-of date ——— */
+(function() {
+  const now = new Date();
+  const opts = { month: 'short', day: 'numeric', year: 'numeric' };
+  document.getElementById("weekof").textContent = now.toLocaleDateString("en-US", opts).toUpperCase();
+})();
+
+/* ——— Render crop grids ——— */
+function farmLabel(f) { return f === "farm01" ? "FARM 01" : "FARM 02"; }
+function pct(c) { return Math.round((c.days / c.total) * 100); }
+
+function renderCurrent() {
+  const active = document.querySelector("#current-toggle .on").dataset.farm;
+  const list = active === "all" ? CURRENT : CURRENT.filter(c => c.farm === active);
+  document.getElementById("current-grid").innerHTML = list.map(c => `
+    <article class="crop-card">
+      <span class="stage">DAY ${c.days} / ${c.total} · ${farmLabel(c.farm)}</span>
+      <h3>${c.name}</h3>
+      <div class="progress"><i data-w="${pct(c)}"></i></div>
+      <div class="meta"><span>NEXT HARVEST</span><b>${c.harvest.toUpperCase()}</b></div>
+      <div class="meta"><span>ON THE WALL</span><b>${c.trays} TRAYS</b></div>
+      <p class="desc">${c.desc}</p>
+    </article>
+  `).join("");
+  // animate bars
+  setTimeout(() => {
+    document.querySelectorAll("#current-grid .progress i").forEach(i => i.style.width = i.dataset.w + "%");
+  }, 100);
+}
+
+function renderFuture() {
+  document.getElementById("future-grid").innerHTML = FUTURE.map(c => `
+    <article class="crop-card future">
+      <span class="stage">IN ${c.weeks} WEEKS · ${farmLabel(c.farm)}</span>
+      <h3>${c.name}</h3>
+      <div class="progress"><i></i></div>
+      <div class="meta"><span>STATUS</span><b>SEED LAB</b></div>
+      <div class="meta"><span>EXPECTED</span><b>Q${Math.ceil(c.weeks / 13)} 2026</b></div>
+      <p class="desc">${c.desc}</p>
+    </article>
+  `).join("");
+}
+
+document.querySelectorAll("#current-toggle button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#current-toggle button").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    renderCurrent();
+  });
+});
+
+renderCurrent();
+renderFuture();
+
+/* ——— Example chips ——— */
+document.querySelectorAll(".cr-request .examples button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.getElementById("rf-msg").value = btn.dataset.fill;
+    document.getElementById("rf-msg").focus();
+  });
+});
+
+/* ——— Form submit ——— */
+document.getElementById("request-form").addEventListener("submit", e => {
+  e.preventDefault();
+  document.getElementById("rf-success").style.display = "block";
+  setTimeout(() => {
+    e.target.reset();
+    document.getElementById("rf-success").style.display = "none";
+  }, 4000);
+});
+</script>
+
+</body>
+</html>
